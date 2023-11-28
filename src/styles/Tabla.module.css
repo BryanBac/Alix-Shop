@@ -1,0 +1,30 @@
+
+.celdaHead {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.celdaRow {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.celdaRow2 {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: orange
+}
+.bg {
+    background-color: #FFFEC4;
+}
+
+.colorOne {
+    background: linear-gradient(to right, rgb(194, 156, 200, 0), rgb(194, 156, 200, 0.25), rgb(194, 156, 200, 0.65), rgb(194, 156, 200, 1.0));
+}
