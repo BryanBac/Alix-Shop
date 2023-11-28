@@ -1,0 +1,20 @@
+.container{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 20% 70% 10%;
+    margin-top: 20px;
+}
+.barraColor{
+    background-color: rgb(194, 156, 200, 0.8);
+    border-radius: 20px;
+}
+.cambioModo{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15%;
+}
+.menu{
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 5%;
+}

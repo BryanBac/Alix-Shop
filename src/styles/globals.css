@@ -1,0 +1,18 @@
+:root {
+  --background-color: #f4eeee;
+  --text-color: #333;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.boton-sin{
+  background: none;
+  border: none;
+  padding: 0; 
+  cursor: pointer;
+  color: #000; 
+  text-decoration: none;
+}
