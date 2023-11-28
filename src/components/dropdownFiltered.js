@@ -2,7 +2,7 @@ import styles from '@/styles/Dropdown.module.css'
 import obtener from '@/pages/api/firebase/get-data';
 import { useState, useEffect } from "react";
 
-export default function DropdownFiltered({ onSelect, setClienteNombre }) {
+export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNombre }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [clientes, setClientes] = useState([])
     const [buscar, setBuscar] = useState([])
@@ -50,7 +50,7 @@ export default function DropdownFiltered({ onSelect, setClienteNombre }) {
 
     return (
         <div className={styles.dropdown}>
-            <textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)} value={nombre}></textarea>
+            <textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)} value={clienteNombre}></textarea>
             <ul className={styles.dropdownList}>
                 {buscar.map((option) => (
                     <li key={option.id} onClick={() => handleSelect(option)}>
