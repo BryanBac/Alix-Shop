@@ -8,7 +8,7 @@ import CreateClientModal from "@/components/popup/modalCreateClient";
 import ModalPopUp from "@/components/popup/popup";
 
 
-export default function verPedidos() {
+export default function VerPedidos() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [pedidos, setPedidos] = useState([])
   const [buscar, setBuscar] = useState([])

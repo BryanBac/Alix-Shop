@@ -24,3 +24,7 @@ body {
 .itemScroller {
   margin: 10px 0;
 }
+.drop{
+  border-radius: 20px;
+  background-color: #f4eeee;
+}
