@@ -6,14 +6,17 @@ import styles from '@/styles/VerClientes.module.css'
 import TablaClientes from "@/components/tablaClientes";
 import CreateClientModal from "@/components/popup/modalCreateClient";
 import ModalPopUp from "@/components/popup/popup";
+import { useRouter } from "next/router";
 
 
 export default function VerPedidos() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [pedidos, setPedidos] = useState([])
+  const [aliexpress, setAliexpress] = useState([])
+  const [shein, setShein] = useState([])
   const [buscar, setBuscar] = useState([])
   const [agregado, setAgregado] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
+  const router = useRouter()
   const filtrarPedidos = (valorBusqueda) => {
     return pedidos.filter(pedido =>
       pedido.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
@@ -22,11 +25,19 @@ export default function VerPedidos() {
     );
   };
 
-  const fetchData = async () => {
+  const fetchAliexpress = async () => {
     try {
-      const result = await obtener("clientes");
-      setPedidos(result);
-      setBuscar(result)
+      const result = await obtener("Aliexpress");
+      setAliexpress(result);
+    } catch (error) {
+      // Handle the error if needed
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchShein = async () => {
+    try {
+      const result = await obtener("Shein");
+      setAliexpress(result);
     } catch (error) {
       // Handle the error if needed
       console.error("Error fetching data:", error);
@@ -40,7 +51,8 @@ export default function VerPedidos() {
   }
 
   useEffect(() => {
-    fetchData()
+    fetchAliexpress()
+    fetchShein()
   }, [agregado])
 
   return (
@@ -63,13 +75,13 @@ export default function VerPedidos() {
           <div className={styles.barraClientes}>
             <div className={styles.inputC}>
               <div className={styles.square1}>Buscar</div>
-              <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)}></textarea></div>
+              <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
             </div>
             <div className={styles.buttonC}>
-              <button className={styles.button} onClick={(e) => setOpenPopUp(true)}>Agregar Pedido</button>
+              <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
             </div>
           </div>
-          <TablaClientes data={buscar}></TablaClientes>
+          
         </div>
       </div>
     </>

@@ -2,29 +2,55 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .gridContainer{
     display: grid;
     grid-template-columns: 50% 50%;
 }
-
+.gridConBotones{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    width: 85%;
+}
 .blockContainer{
     display: block;
-    width: 60%;
+    width: 100%;
 }
 .buttonC{
     font-size: x-large;
     display: flex;
     align-items: flex-end;
 }
-.button {
-    background-color: rgb(194, 156, 200);
+
+.buttonC2{
+    font-size: x-large;
+    display: flex;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+.button, .button2, .button3, .button4 {
     padding: 0;
     border-radius: 20px;
-    border-color: rgb(194, 156, 200);
     width: 200px;
     height: 40px;
+}
+.button {
+    background-color: rgb(194, 156, 200);
+    border-color: rgb(194, 156, 200);
+}
+.button2 {
+    background-color: rgb(245, 49, 49);
+    border-color: rgb(245, 49, 49);
+    color: white;
+}
+.button3 {
+    background-color: rgb(157, 246, 219);
+    border-color: rgb(157, 246, 219);
+}
+.button4 {
+    background-color: rgb(194, 156, 200);
+    border-color: rgb(194, 156, 200);
 }
 .productoContainer{
     display: block;
@@ -32,8 +58,13 @@
 }
 .barraProducto{
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 25% 25% 25% 25%;
     column-gap: 5px;
+}
+.botones{
+    display: block;
+    width: 100%;
+    padding-left: 10%;
 }
 .letra{
     font-size: x-large;
@@ -43,7 +74,7 @@
     width: 100%;
     grid-template-columns:35% 60%;
     column-gap: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
     align-items: center;
 }
 

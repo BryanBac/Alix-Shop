@@ -28,13 +28,13 @@
 .dropdownList li {
   padding: 10px;
   cursor: pointer;
-  background-color: rgb(194, 156, 200, 0.4);
+  background-color: rgb(194, 156, 200, 1);
   font-size: large;
   color:black
 }
 
 .dropdownList li:hover {
-  background-color: rgb(194, 156, 200, 0.4);
+  background-color: rgb(194, 156, 200, 0.9);
 }
 
 .dropdown:hover .dropdownList {
