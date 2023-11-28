@@ -6,13 +6,31 @@ import styles from '@/styles/CrearPedido.module.css'
 import enviar from "./api/firebase/post-data";
 import Dropdown from "@/components/dropdown";
 import DateCalendarValue from "@/components/datePicker";
+import DropdownFiltered from "@/components/dropdownFiltered";
+
+function obtenerFechaHoy() {
+    const fecha = new Date();
+
+    // Obtiene día, mes y año
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // ¡Recuerda que los meses son indexados desde 0!
+    const año = fecha.getFullYear();
+
+    // Formatea la fecha como dd/mm/yyyy
+    const fechaFormateada = `${dia}/${mes}/${año}`;
+
+    return fechaFormateada;
+}
 
 export default function CrearPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [aliShein, setAliShein] = useState("")
-    const [clientes, setClientes] = useState([])
+    const [clienteDrop, setClienteDrop] = useState("")
     const [buscar, setBuscar] = useState([])
     const [fechaAprox, setFechaAprox] = useState("")
+    const [fechaHoy, setFechaHoy] = useState("")
+    const [estado, setEstado] = useState("")
+    const [clientes, setClientes] = useState([])
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
@@ -36,14 +54,18 @@ export default function CrearPedido() {
         setBuscar(filtrarPedidos(valor));
 
     }
+    useEffect(() => {
+        if (aliShein == "Alixpress") {
+            document.documentElement.style.setProperty('--identicolor', 'rgb(231, 44, 3, 0.8)');
+        } else if (aliShein == "Shein") {
+            document.documentElement.style.setProperty('--identicolor', '#000');
+        }
+    }, [aliShein])
 
     useEffect(() => {
+        setFechaHoy(obtenerFechaHoy())
         fetchData()
     }, [])
-
-    useEffect(() => {
-        console.log(clientes)
-    }, [clientes])
     return (
         <>
             <Head>
@@ -54,19 +76,76 @@ export default function CrearPedido() {
             </Head>
             <Bar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></Bar>
             <div className={styles.flexConatiner}>
-                <div className={styles.gridContainer}>
-                    <div className={styles.inputC}>
-                        <div className={styles.square1}>Origen</div>
-                        <Dropdown options={["Alixpress", "Shein"]} onSelect={setAliShein}></Dropdown>
+                <div className={styles.blockContainer}>
+                    <div className={styles.gridContainer}>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}>Origen</div>
+                            <Dropdown options={["Alixpress", "Shein"]} onSelect={setAliShein}></Dropdown>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Cliente</div></div>
+                            <div className={styles.square2}>
+                                <DropdownFiltered
+                                    onSelect={setClienteDrop}
+                                />
+                            </div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Fecha Pedido</div></div>
+                            <div className={styles.square2}>{fechaHoy}</div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Aprox</div></div>
+                            <DateCalendarValue setValue={setFechaAprox} name="Fecha Apoximada"></DateCalendarValue>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Codigo de Correo</div></div>
+                            <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Codigo de Rastreo</div></div>
+                            <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Anticipo</div></div>
+                            <div className={styles.square2}><input type="number" className={styles.inp}></input></div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}>Estado</div>
+                            <Dropdown options={["Pedido", "Recibido", "Enviado", "Entregado"]} onSelect={setEstado}></Dropdown>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Fecha Final</div></div>
+                            <div className={styles.square2}></div>
+                        </div>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div>Total</div></div>
+                            <div className={styles.square2}></div>
+                        </div>
                     </div>
-                    <div className={styles.inputC}>
-                        <div className={styles.square1}>Buscar</div>
-                        <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)}></textarea></div>
-                    </div>
-                    <div></div>
-                    <div className={styles.inputC}>
-                        <div className={styles.square1}>Aprox</div>
-                        <DateCalendarValue setValue={setFechaAprox} name="Fecha Apoximada"></DateCalendarValue>
+                    <div className={styles.productoContainer}>
+                        <div className={styles.barraProducto}>
+                            <div className={styles.inputC}>
+                                <div className={styles.square3}><div>Producto</div></div>
+                                <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square3}><div>Proveedor</div></div>
+                                <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square3}><div>Costo</div></div>
+                                <div className={styles.square2}><input type="number" className={styles.inp}></input></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square3}><div>Precio</div></div>
+                                <div className={styles.square2}><input type="number"className={styles.inp}></input></div>
+                            </div>
+                            <div  className={styles.buttonC}>
+                                <button className={styles.button}>Agregar Producto</button>
+                            </div>
+                        </div>
+                        <div></div>
                     </div>
                 </div>
             </div>
