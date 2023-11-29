@@ -10,8 +10,10 @@ import DropdownFiltered from "@/components/dropdownFiltered";
 import TablaProductos from "@/components/tablaProducto";
 import CreatePedidoModal from "@/components/popup/modalCreatePedido";
 import CreatePedidoModal2 from "@/components/popup/modalCreatePedido2";
+import enviarId from "./api/firebase/post-data-id";
 import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
+import ErrorModal from "@/components/popup/modarError";
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -31,6 +33,8 @@ export default function CrearPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false)
     const [openPopUp2, setOpenPopUp2] = useState(false)
+    const [openPopUp3, setOpenPopUp3] = useState(false)
+    const [agregarCliente, setAgregarCliente] = useState(false)
     const router = useRouter()
     const [buscar, setBuscar] = useState([])
     // origen
@@ -40,7 +44,7 @@ export default function CrearPedido() {
     // clientes
     const [clientes, setClientes] = useState([]) // aquí van todos los clientes
     const [clienteDrop, setClienteDrop] = useState("") // aquí va el id del cliente seleccionado
-    const [clienteNombre, setClienteNombre] = useState("")
+    const [clienteNombre, setClienteNombre] = useState("") // aquí va el nombre del cliente
     // codigos
     const [codeAli, setCodeAli] = useState("")
     const [codeMail, setCodeMail] = useState("")
@@ -58,6 +62,11 @@ export default function CrearPedido() {
     const [costo, setCosto] = useState("")
     const [precio, setPrecio] = useState("")
     const [productos, setProductos] = useState([])
+    // aquí para agregar clientes
+    const [agregarNombre, setAgregarNombre] = useState("")
+    const [agregarUsername, setAgregarUsername] = useState("")
+    const [agregarContacto, setAgregarContacto] = useState("")
+    const [agregarCodigoId, setAgregarCodigoId] = useState("")
     // comienzan las funciones
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
@@ -87,11 +96,17 @@ export default function CrearPedido() {
         let pr = {
             producto: producto,
             costo: costo,
-            precio: precio
+            precio: precio,
+            codeAli: codeAli,
+            codeMail: codeMail,
+            codeRastreo: codeRastreo
         }
         setCostoT(Number(costoT) + Number(costo))
         setTotal(Number(total) + Number(precio))
         setProductos([...productos, pr])
+        setCodeAli("")
+        setCodeMail("")
+        setCodeRastreo("")
         setProducto("")
         setCosto("")
         setPrecio("")
@@ -112,48 +127,56 @@ export default function CrearPedido() {
         setProductos([])
     }
     const crearPedido = () => {
-        let pedido = {
-            origen: aliShein,
-            clienteId: clienteDrop,
-            clienteNombre: clienteNombre,
-            fechaPedido: fechaHoy,
-            fechaAprox: fechaAprox,
-            codeAli: codeAli,
-            codeMail: codeMail,
-            codeRastreo: codeRastreo,
-            anticipo: anticipo,
-            estado: estado,
-            fechaFinal: fechaFinal,
-            costoTotal: costoT,
-            precioTotal: total,
-            productos: productos
+        if (aliShein != "Aliexpress" || aliShein != "Shein") {
+            setOpenPopUp3(true)
+        } else {
+            let pedido = {
+                origen: aliShein,
+                clienteId: clienteDrop,
+                clienteNombre: clienteNombre,
+                fechaPedido: fechaHoy,
+                fechaAprox: fechaAprox,
+                codeAli: codeAli,
+                codeMail: codeMail,
+                codeRastreo: codeRastreo,
+                anticipo: anticipo,
+                estado: estado,
+                fechaFinal: fechaFinal,
+                costoTotal: costoT,
+                precioTotal: total,
+                productos: productos
+            }
+            enviar(aliShein, pedido)
+            vaciar()
+            setOpenPopUp(true)
         }
-        enviar(aliShein, pedido)
-        vaciar()
-        setOpenPopUp(true)
+
     }
     const crearPedido2 = () => {
-        let pedido = {
-            origen: aliShein,
-            clienteId: clienteDrop,
-            clienteNombre: clienteNombre,
-            fechaPedido: fechaHoy,
-            fechaAprox: fechaAprox,
-            codeAli: codeAli,
-            codeMail: codeMail,
-            codeRastreo: codeRastreo,
-            anticipo: anticipo,
-            estado: estado,
-            fechaFinal: fechaFinal,
-            costoTotal: costoT,
-            precioTotal: total,
-            productos: productos
+        if (aliShein != "Aliexpress" || aliShein != "Shein") {
+            setOpenPopUp3(true)
+        } else {
+            let pedido = {
+                origen: aliShein,
+                clienteId: clienteDrop,
+                clienteNombre: clienteNombre,
+                fechaPedido: fechaHoy,
+                fechaAprox: fechaAprox,
+                codeAli: codeAli,
+                codeMail: codeMail,
+                codeRastreo: codeRastreo,
+                anticipo: anticipo,
+                estado: estado,
+                fechaFinal: fechaFinal,
+                costoTotal: costoT,
+                precioTotal: total,
+                productos: productos
+            }
+            enviar(aliShein, pedido)
+            vaciar()
+            setOpenPopUp2(true)
         }
-        enviar(aliShein, pedido)
-        vaciar()
-        setOpenPopUp2(true)
     }
-   
 
     useEffect(() => {
         if (aliShein == "Aliexpress") {
@@ -198,6 +221,12 @@ export default function CrearPedido() {
             >
                 <CreatePedidoModal2></CreatePedidoModal2>
             </ModalPopUp>
+            <ModalPopUp
+                openPopUp={openPopUp3}
+                setOpenPopUp={setOpenPopUp3}
+            >
+                <ErrorModal error="Elije AliExpress/Shein"></ErrorModal>
+            </ModalPopUp>
             <div className={styles.flexConatiner}>
                 <div className={styles.gridConBotones}>
                     <div className={styles.blockContainer}>
@@ -206,7 +235,7 @@ export default function CrearPedido() {
                                 <div className={styles.square1}>Origen</div>
                                 <Dropdown options={["Aliexpress", "Shein"]} onSelect={setAliShein}></Dropdown>
                             </div>
-                            <div className={styles.inputC}>
+                            <div className={styles.inputC3}>
                                 <div className={styles.square1}><div>Cliente</div></div>
                                 <div className={styles.square2}>
                                     <DropdownFiltered
@@ -215,6 +244,7 @@ export default function CrearPedido() {
                                         onSelect={setClienteDrop}
                                     />
                                 </div>
+                                <div><button onClick={() => setAgregarCliente(!agregarCliente)}>+</button></div>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Fecha Pedido</div></div>
@@ -225,52 +255,42 @@ export default function CrearPedido() {
                                 <DateCalendarValue setValue={setFechaAprox} name="Fecha Apoximada"></DateCalendarValue>
                             </div>
                             <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Codigo Aliexpress</div></div>
-                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeAli(e.target.value)} value={codeAli}></textarea></div>
-                            </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Codigo de Correo</div></div>
-                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeMail(e.target.value)} value={codeMail}></textarea></div>
-                            </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Codigo de Rastreo</div></div>
-                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeRastreo(e.target.value)} value={codeRastreo}></textarea></div>
+                                <div className={styles.square1}>Estado</div>
+                                <Dropdown options={["Pedido", "Recibido", "Enviado", "Entregado"]} onSelect={setEstado}></Dropdown>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Anticipo</div></div>
                                 <div className={styles.square2}><input type="text" className={styles.inp} onChange={(e) => setAnticipo(e.target.value)} value={anticipo}></input></div>
                             </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}>Estado</div>
-                                <Dropdown options={["Pedido", "Recibido", "Enviado", "Entregado"]} onSelect={setEstado}></Dropdown>
-                            </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Fecha Final</div></div>
-                                <div className={styles.square2}>{fechaFinal}</div>
-                            </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Costo Total</div></div>
-                                <div className={styles.square2}>{costoT}</div>
-                            </div>
-                            <div className={styles.inputC}>
-                                <div className={styles.square1}><div>Precio Total</div></div>
-                                <div className={styles.square2}>{total}</div>
-                            </div>
                         </div>
                         <div className={styles.productoContainer}>
                             <div className={styles.barraProducto}>
-                                <div className={styles.inputC}>
+                                <div className={styles.inputC2}>
                                     <div className={styles.square3}><div>Producto</div></div>
                                     <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setProducto(e.target.value)} value={producto}></textarea></div>
                                 </div>
-                                <div className={styles.inputC}>
+                                <div className={styles.inputC2}>
                                     <div className={styles.square3}><div>Costo</div></div>
                                     <div className={styles.square2}><input type="number" className={styles.inp} onChange={(e) => setCosto(e.target.value)} value={costo}></input></div>
                                 </div>
-                                <div className={styles.inputC}>
+                                <div className={styles.inputC2}>
                                     <div className={styles.square3}><div>Precio</div></div>
                                     <div className={styles.square2}><input type="number" className={styles.inp} onChange={(e) => setPrecio(e.target.value)} value={precio}></input></div>
                                 </div>
+                                <div className={styles.inputC2}>
+                                    <div className={styles.square3}><div>Codigo Aliexpress</div></div>
+                                    <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeAli(e.target.value)} value={codeAli}></textarea></div>
+                                </div>
+                                <div className={styles.inputC2}>
+                                    <div className={styles.square3}><div>Codigo de Correo</div></div>
+                                    <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeMail(e.target.value)} value={codeMail}></textarea></div>
+                                </div>
+                                <div className={styles.inputC2}>
+                                    <div className={styles.square3}><div>Codigo de Rastreo</div></div>
+                                    <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setCodeRastreo(e.target.value)} value={codeRastreo}></textarea></div>
+                                </div>
+                            </div>
+                            <div className={styles.flexConatiner}>
                                 <div className={styles.buttonC}>
                                     <button className={styles.button} onClick={() => Agregar()}>Agregar Producto</button>
                                 </div>
@@ -281,19 +301,93 @@ export default function CrearPedido() {
                         </div>
                     </div>
                     <div className={styles.botones}>
-                        <div className={styles.buttonC2}>
-                            <button className={styles.button2} onClick={() => router.push("verPedidos")}>Cancelar</button>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div className={styles.flex}>Costo Total</div></div>
+                            <div className={styles.square2}>{costoT}</div>
                         </div>
-                        <div className={styles.buttonC2}>
-                            <button className={styles.button3} onClick={() => {
-                                crearPedido()
-                            }}>Crear</button>
+                        <div className={styles.inputC}>
+                            <div className={styles.square1}><div className={styles.flex}>Precio Total</div></div>
+                            <div className={styles.square2}>{total}</div>
                         </div>
-                        <div className={styles.buttonC2}>
-                            <button className={styles.button4} onClick={() => {
-                                crearPedido2()
-                            }}>Crear y Crear Otro</button>
+                        <div className={styles.ingresarCliente}>
+                            <div className={styles.ingresarClienteBlock}>
+                                <div className={styles.buttonC2}>
+                                    <button className={styles.button2} onClick={() => router.push("verPedidos")}>Cancelar</button>
+                                </div>
+                                <div className={styles.buttonC2}>
+                                    <button className={styles.button3} onClick={() => {
+                                        crearPedido()
+                                    }}>Crear</button>
+                                </div>
+                                <div className={styles.buttonC2}>
+                                    <button className={styles.button4} onClick={() => {
+                                        crearPedido2()
+                                    }}>Crear y Crear Otro</button>
+                                </div>
+                            </div>
                         </div>
+                        {agregarCliente &&
+                            <div className={styles.ingresarCliente}>
+                                <div className={styles.ingresarClienteBlock}>
+                                    <div>
+                                        <div className={styles.titulos}>Nombre</div>
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            onChange={(e) => setAgregarNombre(e.target.value)}
+                                            value={agregarNombre}
+                                        ></input>
+                                    </div>
+                                    <div>
+                                        <div className={styles.titulos}>Username</div>
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            onChange={(e) => setAgregarUsername(e.target.value)}
+                                            value={agregarUsername}
+                                        ></input>
+                                    </div>
+                                    <div>
+                                        <div className={styles.titulos}>Contacto</div>
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            onChange={(e) => setAgregarContacto(e.target.value)}
+                                            value={agregarContacto}
+                                        ></input>
+                                    </div>
+                                    <div>
+                                        <div className={styles.titulos}>Codigo Id</div>
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            onChange={(e) => setAgregarCodigoId(e.target.value)}
+                                            value={agregarCodigoId}
+                                        ></input>
+                                    </div>
+                                    <div className={styles.buttonC2}>
+                                        <button className={styles.button4} onClick={() => {
+                                            enviarId("clientes", {
+                                                nombre: agregarNombre,
+                                                username: agregarUsername,
+                                                identificador: agregarCodigoId,
+                                                cant_pedidos: 0,
+                                                contacto: agregarContacto
+                                            }).then(data => {
+                                                setClienteDrop(data);
+                                            })
+                                            let x = agregarNombre + "---" + agregarUsername
+                                            setClienteNombre(x)
+                                            setAgregarCliente("")
+                                            setAgregarCodigoId("")
+                                            setAgregarContacto("")
+                                            setAgregarUsername("")
+                                        }}>Crear Cliente</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                 </div>
             </div>

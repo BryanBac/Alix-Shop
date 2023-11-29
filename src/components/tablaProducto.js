@@ -30,6 +30,21 @@ export default function TablaProductos({ data }) {
                                         Precio
                                     </div>
                                 </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Codigo Aliexpress
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Codigo Correo
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Codigo Rastreo
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -48,6 +63,21 @@ export default function TablaProductos({ data }) {
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
                                             {row.precio}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.codeAli}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.codeMail}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.codeRastreo}
                                         </div>
                                     </TableCell>
                                 </TableRow>

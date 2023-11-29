@@ -7,6 +7,7 @@ export default function CreateClientModal(props) {
     const [nombre, setNombre] = useState("")
     const [username, setUserName] = useState("")
     const [identificador, setIdentificador] = useState("")
+    const [contacto, setContacto] = useState("")
     const [cant_pedidos, setCantPedidos] = useState(0)
     return (<>
         <div>
@@ -28,21 +29,21 @@ export default function CreateClientModal(props) {
             ></input>
         </div>
         <div>
+            <div className={styles.titulos}>Contacto</div>
+            <input
+                className={styles.input}
+                type="text"
+                onChange={(e) => setContacto(e.target.value)}
+                value={contacto}
+            ></input>
+        </div>
+        <div>
             <div className={styles.titulos}>Codigo Id</div>
             <input
                 className={styles.input}
                 type="text"
                 onChange={(e) => setIdentificador(e.target.value)}
                 value={identificador}
-            ></input>
-        </div>
-        <div>
-            <div className={styles.titulos}>Cantidad de Pedidos</div>
-            <input
-                className={styles.input}
-                type="number"
-                onChange={(e) => setCantPedidos(Number(e.target.value))}
-                value={cant_pedidos}
             ></input>
         </div>
         <div className={styles.centrar}>
@@ -63,7 +64,8 @@ export default function CreateClientModal(props) {
                         nombre: nombre,
                         username: username,
                         identificador: identificador,
-                        cant_pedidos: cant_pedidos
+                        cant_pedidos: 0,
+                        contacto: contacto
                     })
                     setAgregado(!agregado)
                     setOpenPopUp(false);
