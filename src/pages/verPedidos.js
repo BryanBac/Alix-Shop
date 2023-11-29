@@ -78,6 +78,12 @@ export default function VerPedidos() {
       const combinedArray = [...aliexpress, ...shein]
       const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
       setBuscar(reordenArray)
+    }else if(aliexpress.length>0&&shein.length<=0){
+      const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    }else if(aliexpress.length<=0&&shein.length>0){
+      const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
     }
   },[aliexpress, shein])
 
