@@ -1,13 +1,10 @@
 import Bar from "@/components/bar";
 import { useState, useEffect } from "react";
 import Head from 'next/head'
-import obtener from './api/firebase/get-data'
 import styles from '@/styles/CrearPedido.module.css'
-import enviar from "./api/firebase/post-data";
 import obtenerPorId from "./api/firebase/get-data-one";
 import Dropdown from "@/components/dropdown";
 import DateCalendarValue from "@/components/datePicker";
-import DropdownFiltered from "@/components/dropdownFiltered";
 import TablaProductos from "@/components/tablaProducto";
 import CreatePedidoModal from "@/components/popup/modalCreatePedido";
 import CreatePedidoModal2 from "@/components/popup/modalCreatePedido2";
@@ -15,7 +12,6 @@ import enviarId from "./api/firebase/post-data-id";
 import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
 import ErrorModal from "@/components/popup/modarError";
-import modificarDocumento from "./api/firebase/update-data";
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -31,14 +27,12 @@ function obtenerFechaHoy() {
     return fechaFormateada;
 }
 
-export default function verPedido() {
+export default function VerPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false)
     const [openPopUp2, setOpenPopUp2] = useState(false)
     const [openPopUp3, setOpenPopUp3] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
-    const [buscar, setBuscar] = useState([])
-    const [contador, setContador] = useState([])
     const router = useRouter()
     // origen
     const [aliShein, setAliShein] = useState("")
@@ -112,63 +106,6 @@ export default function verPedido() {
         setCostoT(0)
         setTotal(0)
         setProductos([])
-    }
-    const crearPedido = () => {
-        if (aliShein != "Aliexpress" || aliShein != "Shein") {
-            setOpenPopUp3(true)
-        } else {
-            let pedido = {
-                contador: contador[0].contador+1,
-                origen: aliShein,
-                clienteId: clienteDrop,
-                clienteNombre: clienteNombre,
-                fechaPedido: fechaHoy,
-                fechaAprox: fechaAprox,
-                codeAli: codeAli,
-                codeMail: codeMail,
-                codeRastreo: codeRastreo,
-                anticipo: anticipo,
-                estado: estado,
-                fechaFinal: fechaFinal,
-                costoTotal: costoT,
-                precioTotal: total,
-                productos: productos
-            }
-            contador[0].contador=contador[0].contador+1;
-            modificarDocumento(contador[0].id, "contadorPedido", contador[0])
-            enviar(aliShein, pedido)
-            vaciar()
-            setOpenPopUp(true)
-        }
-
-    }
-    const crearPedido2 = () => {
-        if (aliShein != "Aliexpress" || aliShein != "Shein") {
-            setOpenPopUp3(true)
-        } else {
-            let pedido = {
-                contador: contador[0].contador+1,
-                origen: aliShein,
-                clienteId: clienteDrop,
-                clienteNombre: clienteNombre,
-                fechaPedido: fechaHoy,
-                fechaAprox: fechaAprox,
-                codeAli: codeAli,
-                codeMail: codeMail,
-                codeRastreo: codeRastreo,
-                anticipo: anticipo,
-                estado: estado,
-                fechaFinal: fechaFinal,
-                costoTotal: costoT,
-                precioTotal: total,
-                productos: productos
-            }
-            contador[0].contador=contador[0].contador+1;
-            modificarDocumento(contador[0].id, "contadorPedido", contador[0])
-            enviar(aliShein, pedido)
-            vaciar()
-            setOpenPopUp2(true)
-        }
     }
 
     useEffect(() => {

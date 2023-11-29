@@ -1,0 +1,175 @@
+[debug] [2023-11-29T05:02:05.255Z] ----------------------------------------------------------------------
+[debug] [2023-11-29T05:02:05.256Z] Command:       /home/bryan/.nvm/versions/node/v18.16.0/bin/node /home/bryan/.nvm/versions/node/v18.16.0/bin/firebase deploy
+[debug] [2023-11-29T05:02:05.257Z] CLI Version:   12.9.1
+[debug] [2023-11-29T05:02:05.257Z] Platform:      linux
+[debug] [2023-11-29T05:02:05.257Z] Node Version:  v18.16.0
+[debug] [2023-11-29T05:02:05.259Z] Time:          Tue Nov 28 2023 23:02:05 GMT-0600 (Central Standard Time)
+[debug] [2023-11-29T05:02:05.259Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-11-29T05:02:05.331Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-11-29T05:02:05.331Z] > authorizing via signed-in user (bryanbacparedes@gmail.com)
+[debug] [2023-11-29T05:02:05.332Z] [iam] checking project alix-shop for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-11-29T05:02:05.333Z] > refreshing access token with scopes: []
+[debug] [2023-11-29T05:02:05.335Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-11-29T05:02:05.335Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-11-29T05:02:05.623Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-11-29T05:02:05.623Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-11-29T05:02:05.659Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions [none]
+[debug] [2023-11-29T05:02:05.659Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions x-goog-quota-user=projects/alix-shop
+[debug] [2023-11-29T05:02:05.660Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-11-29T05:02:06.016Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions 200
+[debug] [2023-11-29T05:02:06.016Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-11-29T05:02:06.018Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop [none]
+[debug] [2023-11-29T05:02:06.455Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop 200
+[debug] [2023-11-29T05:02:06.455Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop {"projectId":"alix-shop","projectNumber":"264730061300","displayName":"Alix-Shop","name":"projects/alix-shop","resources":{"hostingSite":"alix-shop"},"state":"ACTIVE","etag":"1_d8c88fda-a40b-45d6-8233-7e034e531ab5"}
+[debug] [2023-11-29T05:02:08.883Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites pageToken=&pageSize=10
+[debug] [2023-11-29T05:02:09.681Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites 200
+[debug] [2023-11-29T05:02:09.681Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites {"sites":[{"name":"projects/alix-shop/sites/alix-shop","defaultUrl":"https://alix-shop.web.app","appId":"1:264730061300:web:6f8c6a7beeda44ee81f1a1","type":"DEFAULT_SITE"}]}
+[debug] [2023-11-29T05:02:09.681Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config [none]
+[debug] [2023-11-29T05:02:10.215Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config 200
+[debug] [2023-11-29T05:02:10.216Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config {"projectId":"alix-shop","appId":"1:264730061300:web:6f8c6a7beeda44ee81f1a1","storageBucket":"alix-shop.appspot.com","apiKey":"AIzaSyAkXEum2XYbkw6EbGFPLTEkk0zTr_uTmGA","authDomain":"alix-shop.firebaseapp.com","messagingSenderId":"264730061300","measurementId":"G-ZZ2JYP8JPE"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+Failed to compile.
+
+./src/components/bar.js
+28:8  Warning: React Hook useEffect has a missing dependency: 'setIsDarkMode'. Either include it or remove the dependency array. If 'setIsDarkMode' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+
+./src/pages/index.js
+36:4  Warning: React Hook useEffect has missing dependencies: 'router' and 'usuario'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+48:46  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/pages/verPedido.js
+35:41  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+36:39  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+37:41  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+38:41  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+39:49  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+40:33  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+41:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+42:20  Error: React Hook "useRouter" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+44:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+46:33  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+48:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+49:43  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+50:47  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+52:35  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+53:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+54:43  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+56:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+57:41  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+58:41  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+60:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+61:33  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+62:31  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+64:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+65:31  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+66:33  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+67:39  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+69:47  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+70:51  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+71:51  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+72:51  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+74:49  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+75:37  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+76:45  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+78:33  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+79:31  Error: React Hook "useState" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+174:5  Error: React Hook "useEffect" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+184:5  Error: React Hook "useEffect" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+191:5  Error: React Hook "useEffect" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+197:5  Error: React Hook "useEffect" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+216:5  Error: React Hook "useEffect" is called in function "verPedido" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use".  react-hooks/rules-of-hooks
+
+./src/pages/verPedidos.js
+101:5  Warning: React Hook useEffect has missing dependencies: 'aliexpress' and 'shein'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+
+[debug] [2023-11-29T05:02:18.622Z] Error: ENOENT: no such file or directory, open '/home/bryan/GitHub/vendidos/Alix-Shop/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-11-29T05:07:35.051Z] ----------------------------------------------------------------------
+[debug] [2023-11-29T05:07:35.052Z] Command:       /home/bryan/.nvm/versions/node/v18.16.0/bin/node /home/bryan/.nvm/versions/node/v18.16.0/bin/firebase deploy
+[debug] [2023-11-29T05:07:35.053Z] CLI Version:   12.9.1
+[debug] [2023-11-29T05:07:35.053Z] Platform:      linux
+[debug] [2023-11-29T05:07:35.053Z] Node Version:  v18.16.0
+[debug] [2023-11-29T05:07:35.053Z] Time:          Tue Nov 28 2023 23:07:35 GMT-0600 (Central Standard Time)
+[debug] [2023-11-29T05:07:35.053Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-11-29T05:07:35.110Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-11-29T05:07:35.111Z] > authorizing via signed-in user (bryanbacparedes@gmail.com)
+[debug] [2023-11-29T05:07:35.111Z] [iam] checking project alix-shop for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-11-29T05:07:35.113Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions [none]
+[debug] [2023-11-29T05:07:35.113Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions x-goog-quota-user=projects/alix-shop
+[debug] [2023-11-29T05:07:35.114Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-11-29T05:07:35.545Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions 200
+[debug] [2023-11-29T05:07:35.546Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alix-shop:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-11-29T05:07:35.549Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop [none]
+[debug] [2023-11-29T05:07:35.929Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop 200
+[debug] [2023-11-29T05:07:35.930Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/alix-shop {"projectId":"alix-shop","projectNumber":"264730061300","displayName":"Alix-Shop","name":"projects/alix-shop","resources":{"hostingSite":"alix-shop"},"state":"ACTIVE","etag":"1_d8c88fda-a40b-45d6-8233-7e034e531ab5"}
+[debug] [2023-11-29T05:07:37.898Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites pageToken=&pageSize=10
+[debug] [2023-11-29T05:07:38.649Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites 200
+[debug] [2023-11-29T05:07:38.649Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/alix-shop/sites {"sites":[{"name":"projects/alix-shop/sites/alix-shop","defaultUrl":"https://alix-shop.web.app","appId":"1:264730061300:web:6f8c6a7beeda44ee81f1a1","type":"DEFAULT_SITE"}]}
+[debug] [2023-11-29T05:07:38.650Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config [none]
+[debug] [2023-11-29T05:07:39.201Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config 200
+[debug] [2023-11-29T05:07:39.202Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:264730061300:web:6f8c6a7beeda44ee81f1a1/config {"projectId":"alix-shop","appId":"1:264730061300:web:6f8c6a7beeda44ee81f1a1","storageBucket":"alix-shop.appspot.com","apiKey":"AIzaSyAkXEum2XYbkw6EbGFPLTEkk0zTr_uTmGA","authDomain":"alix-shop.firebaseapp.com","messagingSenderId":"264730061300","measurementId":"G-ZZ2JYP8JPE"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+./src/components/bar.js
+28:8  Warning: React Hook useEffect has a missing dependency: 'setIsDarkMode'. Either include it or remove the dependency array. If 'setIsDarkMode' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+
+./src/pages/index.js
+36:4  Warning: React Hook useEffect has missing dependencies: 'router' and 'usuario'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+48:46  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/pages/verPedidos.js
+101:5  Warning: React Hook useEffect has missing dependencies: 'aliexpress' and 'shein'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+
+[info]    ▲ Next.js 14.0.3
+
+[info]    - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully
+
+[info]    Collecting page data ...
+
+[info]    Generating static pages (0/8) ...
+
+[info]    Generating static pages (2/8) 
+
+[info]    Generating static pages (4/8) 
+
+[info]    Generating static pages (6/8) 
+
+[info]  ✓ Generating static pages (8/8) 
+
+[info]    Finalizing page optimization ...
+   Collecting build traces ...
+
