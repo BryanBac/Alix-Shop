@@ -2,8 +2,8 @@ import Bar from "@/components/bar";
 import { useState, useEffect } from "react";
 import Head from 'next/head'
 import obtener from './api/firebase/get-data'
-import styles from '@/styles/VerClientes.module.css'
-import TablaClientes from "@/components/tablaClientes";
+import styles from '@/styles/VerPedidos.module.css'
+import Tarjeta from "@/components/tarjeta";
 import CreateClientModal from "@/components/popup/modalCreateClient";
 import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
@@ -12,16 +12,16 @@ import { useRouter } from "next/router";
 export default function VerPedidos() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [aliexpress, setAliexpress] = useState([])
+  const [selectedSources, setSelectedSources] = useState([]);
   const [shein, setShein] = useState([])
   const [buscar, setBuscar] = useState([])
   const [agregado, setAgregado] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
   const router = useRouter()
+
   const filtrarPedidos = (valorBusqueda) => {
-    return pedidos.filter(pedido =>
-      pedido.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-      pedido.username.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-      pedido.identificador.toLowerCase().includes(valorBusqueda.toLowerCase()) 
+    return buscar.filter(pedido =>
+      pedido.clienteNombre.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
   };
 
@@ -37,7 +37,7 @@ export default function VerPedidos() {
   const fetchShein = async () => {
     try {
       const result = await obtener("Shein");
-      setAliexpress(result);
+      setShein(result);
     } catch (error) {
       // Handle the error if needed
       console.error("Error fetching data:", error);
@@ -46,14 +46,59 @@ export default function VerPedidos() {
 
   const Busqueda = (e) => {
     const valor = e.target.value;
-    setBuscar(filtrarPedidos(valor));
-
+    if(valor!=""){
+      setBuscar(filtrarPedidos(valor));
+    }else{
+      if(selectedSources.length>=2){
+        const combinedArray = [...aliexpress, ...shein]
+        // debo ordenarlos por fecha
+        const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      }else if(selectedSources.length==1){
+        if(selectedSources[0]=="AliExpress"){
+          const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        }else{
+          const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        }
+      }else{
+        setBuscar([])
+      }
+    }
   }
 
   useEffect(() => {
     fetchAliexpress()
     fetchShein()
   }, [agregado])
+
+  useEffect(()=>{
+    if(aliexpress.length>0&& shein.length>0){
+      const combinedArray = [...aliexpress, ...shein]
+      const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    }
+  },[aliexpress, shein])
+
+  useEffect(()=>{
+    if(selectedSources.length>=2){
+      const combinedArray = [...aliexpress, ...shein]
+      // debo ordenarlos por fecha
+      const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    }else if(selectedSources.length==1){
+      if(selectedSources[0]=="AliExpress"){
+        const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      }else{
+        const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      }
+    }else{
+      setBuscar([])
+    }
+  },[selectedSources])
 
   return (
     <>
@@ -75,13 +120,59 @@ export default function VerPedidos() {
           <div className={styles.barraClientes}>
             <div className={styles.inputC}>
               <div className={styles.square1}>Buscar</div>
-              <div className={styles.square2}><textarea type="text" className={styles.inp}></textarea></div>
+              <div className={styles.square2}><textarea type="text" className={styles.inp}  onChange={(e) => Busqueda(e)}></textarea></div>
             </div>
             <div className={styles.buttonC}>
               <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
             </div>
           </div>
-          
+          <div className={styles.checkboxContainer}>
+            <label>
+              <input
+                type="checkbox"
+                checked={selectedSources.includes('AliExpress')}
+                onChange={() => {
+                  setSelectedSources((prev) =>
+                    prev.includes('AliExpress')
+                      ? prev.filter((source) => source !== 'AliExpress')
+                      : [...prev, 'AliExpress']
+                  );
+                }}
+              />
+              AliExpress
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={selectedSources.includes('Shein')}
+                onChange={() => {
+                  setSelectedSources((prev) =>
+                    prev.includes('Shein')
+                      ? prev.filter((source) => source !== 'Shein')
+                      : [...prev, 'Shein']
+                  );
+                }}
+              />
+              Shein
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={selectedSources.length === 2}
+                onChange={() => {
+                  setSelectedSources((prev) =>
+                    prev.length === 2 ? [] : ['AliExpress', 'Shein']
+                  );
+                }}
+              />
+              Todos
+            </label>
+          </div>
+          <div className={styles.grillaTarjetas}>
+            {buscar.map((item)=>(
+              <Tarjeta origen={item.origen}key={item.id} numero={item.contador} nombre={item.clienteNombre}fecha={item.fechaPedido} idPedido={item.id}></Tarjeta>
+            ))}
+          </div>
         </div>
       </div>
     </>

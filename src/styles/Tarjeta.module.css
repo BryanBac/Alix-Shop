@@ -1,0 +1,38 @@
+.container{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    width: 100%;
+    height: 60px;
+    margin-top: 25px;
+}
+.left{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(194, 156, 200);
+    font-size: xx-large;
+    font-weight: bold;
+    border-radius: 20px 0px 0px 20px;
+}
+.right{
+    display: block;
+    padding: 5px;
+    background-color: rgb(194, 156, 200, 0.7);
+    border-radius: 0px 20px 20px 0px;
+}
+.hijo1, .hijo2, .hijo3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hijo1{
+    font-size: x-large;
+    font-weight: bold;
+}
+.hijo2{
+    font-size: large;
+}
+.hijo3{
+    font-size: medium;
+    font-style: italic;
+}

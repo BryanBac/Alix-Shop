@@ -29,21 +29,21 @@ export default function CreateClientModal(props) {
             ></input>
         </div>
         <div>
-            <div className={styles.titulos}>Contacto</div>
-            <input
-                className={styles.input}
-                type="text"
-                onChange={(e) => setContacto(e.target.value)}
-                value={contacto}
-            ></input>
-        </div>
-        <div>
-            <div className={styles.titulos}>Codigo Id</div>
+            <div className={styles.titulos}>Dirección</div>
             <input
                 className={styles.input}
                 type="text"
                 onChange={(e) => setIdentificador(e.target.value)}
                 value={identificador}
+            ></input>
+        </div>
+        <div>
+            <div className={styles.titulos}>Número de Telefono</div>
+            <input
+                className={styles.input}
+                type="text"
+                onChange={(e) => setContacto(e.target.value)}
+                value={contacto}
             ></input>
         </div>
         <div className={styles.centrar}>
@@ -63,9 +63,9 @@ export default function CreateClientModal(props) {
                     enviar("clientes", {
                         nombre: nombre,
                         username: username,
-                        identificador: identificador,
+                        direccion: identificador,
                         cant_pedidos: 0,
-                        contacto: contacto
+                        telefono: contacto
                     })
                     setAgregado(!agregado)
                     setOpenPopUp(false);

@@ -17,11 +17,6 @@ export default function TablaClientes({ data }) {
                             <TableRow>
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
-                                        Identificador
-                                    </div>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <div className={styles.celdaRow}>
                                         Nombre
                                     </div>
                                 </TableCell>
@@ -30,9 +25,15 @@ export default function TablaClientes({ data }) {
                                         Username
                                     </div>
                                 </TableCell>
+                                
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
-                                        Cantidad de Pedidos
+                                        Dirección
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Teléfono
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -40,11 +41,6 @@ export default function TablaClientes({ data }) {
                         <TableBody>
                             {data.map((row) => (
                                 <TableRow key={row.id}>
-                                    <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.identificador}
-                                        </div>
-                                    </TableCell>
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
                                             {row.nombre}
@@ -57,7 +53,12 @@ export default function TablaClientes({ data }) {
                                     </TableCell>
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
-                                            {row.cant_pedidos}
+                                            {row.direccion}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.telefono}
                                         </div>
                                     </TableCell>
                                 </TableRow>

@@ -4,6 +4,7 @@ import Head from 'next/head'
 import obtener from './api/firebase/get-data'
 import styles from '@/styles/CrearPedido.module.css'
 import enviar from "./api/firebase/post-data";
+import obtenerPorId from "./api/firebase/get-data-one";
 import Dropdown from "@/components/dropdown";
 import DateCalendarValue from "@/components/datePicker";
 import DropdownFiltered from "@/components/dropdownFiltered";
@@ -30,7 +31,7 @@ function obtenerFechaHoy() {
     return fechaFormateada;
 }
 
-export default function CrearPedido() {
+export default function verPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false)
     const [openPopUp2, setOpenPopUp2] = useState(false)
@@ -69,41 +70,14 @@ export default function CrearPedido() {
     const [agregarUsername, setAgregarUsername] = useState("")
     const [agregarContacto, setAgregarContacto] = useState("")
     const [agregarCodigoId, setAgregarCodigoId] = useState("")
+    // para setear los valores
+    const [pedidoObtenido, setPedidoObtenido] = useState()
+    const [idPedido, setIdPedido] = useState("")
+    const [origenPedido, setOrigenPedido] = useState("")
     // ultimos agregados
     const [recibe, setRecibe] = useState("")
     const [envio, setEnvio] = useState("")
     // comienzan las funciones
-    const filtrarPedidos = (valorBusqueda) => {
-        return clientes.filter(cliente =>
-            cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-            cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
-        );
-    };
-
-    const fetchData = async () => {
-        try {
-            const result = await obtener("clientes");
-            setClientes(result)
-        } catch (error) {
-            // Handle the error if needed
-            console.error("Error fetching data:", error);
-        }
-    };
-    const fetchContador = async () => {
-        try {
-            const result = await obtener("contadorPedido");
-            setContador(result)
-        } catch (error) {
-            // Handle the error if needed
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    const Busqueda = (e) => {
-        const valor = e.target.value;
-        setBuscar(filtrarPedidos(valor));
-
-    }
 
     const Agregar = () => {
         let pr = {
@@ -135,19 +109,16 @@ export default function CrearPedido() {
         setAnticipo("")
         setEstado("")
         setFechaFinal("")
-        setRecibe("")
-        setEnvio()
         setCostoT(0)
         setTotal(0)
         setProductos([])
     }
     const crearPedido = () => {
-        console.log(aliShein)
-        if (aliShein != "Aliexpress" && aliShein != "Shein") {
+        if (aliShein != "Aliexpress" || aliShein != "Shein") {
             setOpenPopUp3(true)
         } else {
             let pedido = {
-                contador: contador[0].contador + 1,
+                contador: contador[0].contador+1,
                 origen: aliShein,
                 clienteId: clienteDrop,
                 clienteNombre: clienteNombre,
@@ -161,11 +132,9 @@ export default function CrearPedido() {
                 fechaFinal: fechaFinal,
                 costoTotal: costoT,
                 precioTotal: total,
-                productos: productos,
-                recibe: recibe,
-                envio: envio
+                productos: productos
             }
-            contador[0].contador = contador[0].contador + 1;
+            contador[0].contador=contador[0].contador+1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
             enviar(aliShein, pedido)
             vaciar()
@@ -178,7 +147,7 @@ export default function CrearPedido() {
             setOpenPopUp3(true)
         } else {
             let pedido = {
-                contador: contador[0].contador + 1,
+                contador: contador[0].contador+1,
                 origen: aliShein,
                 clienteId: clienteDrop,
                 clienteNombre: clienteNombre,
@@ -192,11 +161,9 @@ export default function CrearPedido() {
                 fechaFinal: fechaFinal,
                 costoTotal: costoT,
                 precioTotal: total,
-                productos: productos,
-                recibe: recibe,
-                envio: envio
+                productos: productos
             }
-            contador[0].contador = contador[0].contador + 1;
+            contador[0].contador=contador[0].contador+1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
             enviar(aliShein, pedido)
             vaciar()
@@ -215,10 +182,36 @@ export default function CrearPedido() {
     }, [aliShein])
 
     useEffect(() => {
-        setFechaHoy(obtenerFechaHoy())
-        fetchData()
-        fetchContador()
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            setIdPedido(sessionStorage.getItem("idPedido"))
+            setOrigenPedido(sessionStorage.getItem("origenPedido"))
+        }
     }, [])
+
+    useEffect(()=>{
+        if(idPedido!=""&& origenPedido!=""){
+            obtenerPorId(origenPedido, idPedido).then((item)=>setPedidoObtenido(item))
+        }
+    },[idPedido, origenPedido])
+
+    useEffect(()=>{
+        if(typeof pedidoObtenido!="undefined"){
+            setAliShein(pedidoObtenido.origen)
+            setClienteDrop(pedidoObtenido.id)
+            setClienteNombre(pedidoObtenido.clienteNombre)
+            setFechaHoy(pedidoObtenido.fechaPedido)
+            setFechaAprox(pedidoObtenido.fechaAprox)
+            setEstado(pedidoObtenido.estado)
+            setAnticipo(pedidoObtenido.anticipo)
+            setProductos(pedidoObtenido.productos)
+            setCostoT(pedidoObtenido.costoTotal)
+            setTotal(pedidoObtenido.precioTotal)
+            setEnvio(pedidoObtenido.envio)
+            setRecibe(pedidoObtenido.recibe)
+            
+        }else{
+        }
+    },[pedidoObtenido])
 
     useEffect(() => {
         if (estado == "Entregado") {
@@ -260,18 +253,13 @@ export default function CrearPedido() {
                         <div className={styles.gridContainer}>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}>Origen</div>
-                                <Dropdown options={["Aliexpress", "Shein"]} onSelect={setAliShein}></Dropdown>
+                                <div className={styles.square2}>{aliShein}</div>
                             </div>
-                            <div className={styles.inputC3}>
+                            <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Cliente</div></div>
                                 <div className={styles.square2}>
-                                    <DropdownFiltered
-                                        setClienteNombre={setClienteNombre}
-                                        clienteNombre={clienteNombre}
-                                        onSelect={setClienteDrop}
-                                    />
+                                    {clienteNombre}
                                 </div>
-                                <div><button onClick={() => setAgregarCliente(!agregarCliente)}>+</button></div>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Fecha Pedido</div></div>
@@ -279,7 +267,7 @@ export default function CrearPedido() {
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Aprox</div></div>
-                                <DateCalendarValue setValue={setFechaAprox} name="Fecha Apoximada"></DateCalendarValue>
+                                <DateCalendarValue setValue={setFechaAprox} name={fechaAprox}></DateCalendarValue>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}>Estado</div>
@@ -351,13 +339,7 @@ export default function CrearPedido() {
                                 </div>
                                 <div className={styles.buttonC2}>
                                     <button className={styles.button3} onClick={() => {
-                                        crearPedido()
-                                    }}>Crear</button>
-                                </div>
-                                <div className={styles.buttonC2}>
-                                    <button className={styles.button4} onClick={() => {
-                                        crearPedido2()
-                                    }}>Crear y Crear Otro</button>
+                                    }}>Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -383,16 +365,7 @@ export default function CrearPedido() {
                                         ></input>
                                     </div>
                                     <div>
-                                        <div className={styles.titulos}>Dirección</div>
-                                        <input
-                                            className={styles.input}
-                                            type="text"
-                                            onChange={(e) => setAgregarCodigoId(e.target.value)}
-                                            value={agregarCodigoId}
-                                        ></input>
-                                    </div>
-                                    <div>
-                                        <div className={styles.titulos}>Numero de telefono</div>
+                                        <div className={styles.titulos}>Contacto</div>
                                         <input
                                             className={styles.input}
                                             type="text"
@@ -400,14 +373,23 @@ export default function CrearPedido() {
                                             value={agregarContacto}
                                         ></input>
                                     </div>
+                                    <div>
+                                        <div className={styles.titulos}>Codigo Id</div>
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            onChange={(e) => setAgregarCodigoId(e.target.value)}
+                                            value={agregarCodigoId}
+                                        ></input>
+                                    </div>
                                     <div className={styles.buttonC2}>
                                         <button className={styles.button4} onClick={() => {
                                             enviarId("clientes", {
                                                 nombre: agregarNombre,
                                                 username: agregarUsername,
-                                                direccion: agregarCodigoId,
+                                                identificador: agregarCodigoId,
                                                 cant_pedidos: 0,
-                                                telefono: agregarContacto
+                                                contacto: agregarContacto
                                             }).then(data => {
                                                 setClienteDrop(data);
                                             })

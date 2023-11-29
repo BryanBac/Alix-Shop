@@ -10,8 +10,7 @@ export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNo
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-            cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-            cliente.identificador.toLowerCase().includes(valorBusqueda.toLowerCase())
+            cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
         );
     };
 
@@ -50,7 +49,7 @@ export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNo
 
     return (
         <div className={styles.dropdown}>
-            <textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)} value={clienteNombre}></textarea>
+            <textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)} value={nombre}></textarea>
             <ul className={styles.dropdownList}>
                 {buscar.map((option) => (
                     <li key={option.id} onClick={() => handleSelect(option)}>

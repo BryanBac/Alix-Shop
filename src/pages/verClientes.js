@@ -17,8 +17,7 @@ export default function VerClientes() {
   const filtrarClientes = (valorBusqueda) => {
     return clientes.filter(cliente =>
       cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-      cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-      cliente.identificador.toLowerCase().includes(valorBusqueda.toLowerCase()) 
+      cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
     );
   };
 
