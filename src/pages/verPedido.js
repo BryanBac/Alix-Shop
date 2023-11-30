@@ -12,6 +12,12 @@ import enviarId from "./api/firebase/post-data-id";
 import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
 import ErrorModal from "@/components/popup/modarError";
+import ModalImagen from "@/components/popup/modalImagen";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+import Image from "next/image";
+import modificarDocumento from "./api/firebase/update-data";
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -33,6 +39,7 @@ export default function VerPedido() {
     const [openPopUp2, setOpenPopUp2] = useState(false)
     const [openPopUp3, setOpenPopUp3] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
+    const [contador, setContador] = useState(0)
     const router = useRouter()
     // origen
     const [aliShein, setAliShein] = useState("")
@@ -70,7 +77,17 @@ export default function VerPedido() {
     const [origenPedido, setOrigenPedido] = useState("")
     // ultimos agregados
     const [recibe, setRecibe] = useState("")
-    const [envio, setEnvio] = useState("")
+    const [envio, setEnvio] = useState("") // para agregar imagen
+    const [preview, setPreview] = useState("/../public/camara.png");
+    const [prompt, setPrompt] = useState("Añadir Imagen");
+    const [file, setFile] = useState(null);
+    const [tamañoImagen, setTamañoImagen] = useState(250)
+    const [abrirImagen, setAbrirImagen] = useState(false)
+    function handleChange(e) {
+        setFile(e.target.files[0]);
+        setPreview(URL.createObjectURL(e.target.files[0]));
+        setPrompt("");
+    }
     // comienzan las funciones
 
     const Agregar = () => {
@@ -108,6 +125,77 @@ export default function VerPedido() {
         setProductos([])
     }
 
+    const modificarPedido = () => {
+        console.log(aliShein)
+        if (aliShein != "Aliexpress" && aliShein != "Shein") {
+            setOpenPopUp3(true)
+        } else {
+            const refImagen = ref(storage, `/${file.name + v4()}`);
+            uploadBytes(refImagen, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    let pedido = {
+                        origen: aliShein,
+                        clienteId: clienteDrop,
+                        clienteNombre: clienteNombre,
+                        fechaPedido: fechaHoy,
+                        fechaAprox: fechaAprox,
+                        codeAli: codeAli,
+                        codeMail: codeMail,
+                        codeRastreo: codeRastreo,
+                        anticipo: anticipo,
+                        estado: estado,
+                        fechaFinal: fechaFinal,
+                        costoTotal: costoT,
+                        precioTotal: total,
+                        productos: productos,
+                        recibe: recibe,
+                        envio: envio,
+                        imagen: url,
+                        contador: contador,
+                    }
+                    modificarDocumento(idPedido,aliShein,pedido)
+                    vaciar()
+                    setOpenPopUp(true)
+                });
+            });
+        }
+
+    }
+    const modificarPedido2 = () => {
+        if (aliShein != "Aliexpress" || aliShein != "Shein") {
+            setOpenPopUp3(true)
+        } else {
+            const refImagen = ref(storage, `/${file.name + v4()}`);
+            uploadBytes(refImagen, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    let pedido = {
+                        origen: aliShein,
+                        clienteId: clienteDrop,
+                        clienteNombre: clienteNombre,
+                        fechaPedido: fechaHoy,
+                        fechaAprox: fechaAprox,
+                        codeAli: codeAli,
+                        codeMail: codeMail,
+                        codeRastreo: codeRastreo,
+                        anticipo: anticipo,
+                        estado: estado,
+                        fechaFinal: fechaFinal,
+                        costoTotal: costoT,
+                        precioTotal: total,
+                        productos: productos,
+                        recibe: recibe,
+                        envio: envio,
+                        imagen: url,
+                        contador: contador
+                    }
+                    modificarDocumento(idPedido,aliShein,pedido)
+                    vaciar()
+                    setOpenPopUp2(true)
+                });
+            });
+        }
+    }
+
     useEffect(() => {
         if (aliShein == "Aliexpress") {
             document.documentElement.style.setProperty('--identicolor', 'rgb(231, 44, 3, 0.8)');
@@ -139,12 +227,17 @@ export default function VerPedido() {
             setFechaHoy(pedidoObtenido.fechaPedido)
             setFechaAprox(pedidoObtenido.fechaAprox)
             setEstado(pedidoObtenido.estado)
+            if(pedidoObtenido.imagen!=""){
+                setPreview(pedidoObtenido.imagen)
+            }
+            setFechaFinal(pedidoObtenido.fechaFinal)
             setAnticipo(pedidoObtenido.anticipo)
             setProductos(pedidoObtenido.productos)
             setCostoT(pedidoObtenido.costoTotal)
             setTotal(pedidoObtenido.precioTotal)
             setEnvio(pedidoObtenido.envio)
             setRecibe(pedidoObtenido.recibe)
+            setContador(pedidoObtenido.contador)
             
         }else{
         }
@@ -183,6 +276,12 @@ export default function VerPedido() {
                 setOpenPopUp={setOpenPopUp3}
             >
                 <ErrorModal error="Elije AliExpress/Shein"></ErrorModal>
+            </ModalPopUp>
+            <ModalPopUp
+                openPopUp={abrirImagen}
+                setOpenPopUp={setAbrirImagen}
+            >
+                <ModalImagen preview={preview}></ModalImagen>
             </ModalPopUp>
             <div className={styles.flexConatiner}>
                 <div className={styles.gridConBotones}>
@@ -223,6 +322,18 @@ export default function VerPedido() {
                                 <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setEnvio(e.target.value)} value={envio}></textarea></div>
                             </div>
                         </div>
+                        <div className={styles.selectorContainer}>
+                            <label htmlFor="fileInput" className={styles.button5}>
+                                Agregar Guía
+                            </label>
+                            <input
+                                accept="image/png, image/jpeg"
+                                type="file"
+                                id="fileInput"
+                                onChange={handleChange}
+                                style={{ display: 'none' }} // Oculta el input real
+                            />
+                        </div>
                         <div className={styles.productoContainer}>
                             <div className={styles.barraProducto}>
                                 <div className={styles.inputC2}>
@@ -261,6 +372,14 @@ export default function VerPedido() {
                         </div>
                     </div>
                     <div className={styles.botones}>
+                        <div className={styles.imagenContainer}>
+                            <button  className="boton-sin" onClick={() => setAbrirImagen(true)}>
+                                <img
+                                    src={preview}
+                                    className={styles.imagen}
+                                ></img>
+                            </button>
+                        </div>
                         <div className={styles.inputC}>
                             <div className={styles.square1}><div className={styles.flex}>Costo Total</div></div>
                             <div className={styles.square2}>{costoT}</div>
@@ -276,6 +395,7 @@ export default function VerPedido() {
                                 </div>
                                 <div className={styles.buttonC2}>
                                     <button className={styles.button3} onClick={() => {
+                                        modificarPedido();
                                     }}>Guardar</button>
                                 </div>
                             </div>

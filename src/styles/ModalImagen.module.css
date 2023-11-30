@@ -1,0 +1,31 @@
+.centrar{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.boton {
+    margin-top: 60px;
+    background-color: rgb(194, 156, 200);
+    border: none;
+    border-radius: 10px;
+    box-shadow: none;
+    padding: 0;
+    font-size: x-large;
+    height: 50px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000;
+}
+.boton:hover {
+    color: red;
+    box-shadow: 10px 10px lightblue;
+    cursor: pointer;
+}
+
+.imagen{
+    height: 100%;
+    width: 100%;
+}

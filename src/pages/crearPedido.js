@@ -76,7 +76,7 @@ export default function CrearPedido() {
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-            cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
+            cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase())
         );
     };
 
@@ -146,6 +146,12 @@ export default function CrearPedido() {
         if (aliShein != "Aliexpress" && aliShein != "Shein") {
             setOpenPopUp3(true)
         } else {
+            let anti = 0;
+            if(typeof anticipo=="undefined"){
+                anti=0;
+            }else{
+                anti=anticipo
+            }
             let pedido = {
                 contador: contador[0].contador + 1,
                 origen: aliShein,
@@ -156,14 +162,15 @@ export default function CrearPedido() {
                 codeAli: codeAli,
                 codeMail: codeMail,
                 codeRastreo: codeRastreo,
-                anticipo: anticipo,
+                anticipo: anti,
                 estado: estado,
                 fechaFinal: fechaFinal,
                 costoTotal: costoT,
                 precioTotal: total,
                 productos: productos,
                 recibe: recibe,
-                envio: envio
+                envio: envio,
+                imagen: ""
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
@@ -177,6 +184,12 @@ export default function CrearPedido() {
         if (aliShein != "Aliexpress" || aliShein != "Shein") {
             setOpenPopUp3(true)
         } else {
+            let anti = 0;
+            if(typeof anticipo=="undefined"){
+                anti=0;
+            }else{
+                anti=anticipo
+            }
             let pedido = {
                 contador: contador[0].contador + 1,
                 origen: aliShein,
@@ -187,14 +200,15 @@ export default function CrearPedido() {
                 codeAli: codeAli,
                 codeMail: codeMail,
                 codeRastreo: codeRastreo,
-                anticipo: anticipo,
+                anticipo: anti,
                 estado: estado,
                 fechaFinal: fechaFinal,
                 costoTotal: costoT,
                 precioTotal: total,
                 productos: productos,
                 recibe: recibe,
-                envio: envio
+                envio: envio,
+                imagen: ""
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
@@ -260,7 +274,7 @@ export default function CrearPedido() {
                         <div className={styles.gridContainer}>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}>Origen</div>
-                                <Dropdown options={["Aliexpress", "Shein"]} onSelect={setAliShein}></Dropdown>
+                                <Dropdown options={["Aliexpress", "Shein", "Stock"]} onSelect={setAliShein}></Dropdown>
                             </div>
                             <div className={styles.inputC3}>
                                 <div className={styles.square1}><div>Cliente</div></div>

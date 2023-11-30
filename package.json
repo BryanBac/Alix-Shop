@@ -19,6 +19,7 @@
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "uuid": "^9.0.0",
     "dayjs": "^1.11.7"
   },
   "devDependencies": {
