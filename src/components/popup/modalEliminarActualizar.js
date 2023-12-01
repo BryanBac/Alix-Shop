@@ -25,7 +25,7 @@ export default function EliminarActualizar(props) {
                 type=""
                 onClick={() => {
                     eliminarDocumento(coleccion, id).then(() => {
-                        setActualizar(!actualizar)
+                        setActualizar(true)
                         setOpenPopUp(false);
                     })
                 }}

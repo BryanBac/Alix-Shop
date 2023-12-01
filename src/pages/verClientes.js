@@ -13,6 +13,7 @@ export default function VerClientes() {
   const [clientes, setClientes] = useState([])
   const [buscar, setBuscar] = useState([])
   const [agregado, setAgregado] = useState(false)
+  const [actualizar, setActualizar] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
   const filtrarClientes = (valorBusqueda) => {
     return clientes.filter(cliente =>
@@ -41,6 +42,13 @@ export default function VerClientes() {
   useEffect(() => {
     fetchData()
   }, [agregado])
+  
+  useEffect(() => {
+    if(actualizar){
+      fetchData()
+      setActualizar(false)
+    }
+  }, [actualizar])
 
   return (
     <>
@@ -68,7 +76,7 @@ export default function VerClientes() {
               <button className={styles.button} onClick={(e) => setOpenPopUp(true)}>Agregar Cliente</button>
             </div>
           </div>
-          <TablaClientes data={buscar}></TablaClientes>
+          <TablaClientes data={buscar} setActualizado={setActualizar}></TablaClientes>
         </div>
       </div>
     </>
