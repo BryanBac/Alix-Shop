@@ -38,6 +38,7 @@ export default function CrearPedido() {
     const [agregarCliente, setAgregarCliente] = useState(false)
     const [buscar, setBuscar] = useState([])
     const [contador, setContador] = useState([])
+    const [valorContador, setValorContador] = useState(0)
     const router = useRouter()
     // origen
     const [aliShein, setAliShein] = useState("")
@@ -239,6 +240,11 @@ export default function CrearPedido() {
         fetchData()
         fetchContador()
     }, [])
+    useEffect(()=>{
+        if(contador.length>0){
+            setValorContador(contador[0].contador+1)
+        }
+    },[contador])
 
     useEffect(() => {
         if (estado == "Entregado") {
@@ -273,13 +279,13 @@ export default function CrearPedido() {
                 openPopUp={openPopUp}
                 setOpenPopUp={setOpenPopUp}
             >
-                <CreatePedidoModal mensaje="Creado Exitosamente" numeroPedido={contador[0].contador + 1}></CreatePedidoModal>
+                <CreatePedidoModal mensaje="Creado Exitosamente" numeroPedido={valorContador}></CreatePedidoModal>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp2}
                 setOpenPopUp={setOpenPopUp2}
             >
-                <CreatePedidoModal2 mensaje="Creado Exitosamente" numeroPedido={contador[0].contador + 1}></CreatePedidoModal2>
+                <CreatePedidoModal2 mensaje="Creado Exitosamente" numeroPedido={valorContador}></CreatePedidoModal2>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp3}
