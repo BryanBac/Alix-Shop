@@ -19,6 +19,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import TablaUsuario from "@/components/tablaPedidosUsuario";
 import modificarDocumento from "./api/firebase/update-data";
+import EliminarPedido from "@/components/popup/modalEliminarPedido";
 import TablaPedidosUsuario from "@/components/tablaPedidosUsuario";
 
 function obtenerFechaHoy() {
@@ -41,6 +42,7 @@ export default function VerPedido() {
     const [openPopUp2, setOpenPopUp2] = useState(false)
     const [openPopUp3, setOpenPopUp3] = useState(false)
     const [openPopUp4, setOpenPopUp4] = useState(false)
+    const [openPopUp5, setOpenPopUp5] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
     const [contador, setContador] = useState(0)
     const router = useRouter()
@@ -289,6 +291,7 @@ export default function VerPedido() {
 
         }
     }
+
     useEffect(() => {
         if (allData.length > 0 && clienteNombre != "") {
             const documentosFiltrados = allData.filter(documento =>
@@ -394,6 +397,12 @@ export default function VerPedido() {
                 setOpenPopUp={setOpenPopUp4}
             >
                 <ModalPedido data={dataFiltrada}></ModalPedido>
+            </ModalPopUp>
+            <ModalPopUp
+                openPopUp={openPopUp5}
+                setOpenPopUp={setOpenPopUp5}
+            >
+                <EliminarPedido id={idPedido} coleccion={aliShein}></EliminarPedido>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={abrirImagen}
@@ -526,6 +535,11 @@ export default function VerPedido() {
                                     <button className={styles.button3} onClick={() => {
                                         modificarPedido();
                                     }}>Guardar</button>
+                                </div>
+                                <div className={styles.buttonC2}>
+                                    <button className={styles.button4} onClick={() => {
+                                        setOpenPopUp5(true);
+                                    }}>Eliminar</button>
                                 </div>
                             </div>
                         </div>
