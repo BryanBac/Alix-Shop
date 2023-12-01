@@ -18,11 +18,15 @@ export default function Configuracion() {
   const [usuario, setUsuario] = useState("")
   const [password, setPassword] = useState("")
   const [openPopUp, setOpenPopUp] = useState(false)
+  const [openPopUp2, setOpenPopUp2] = useState(false)
 
   const cambiarPedido = () => {
     modificarDocumento(process.env.NEXT_PUBLIC_CONTADOR_ID, "contadorPedido", {
       contador: Number(contador),
       id: process.env.NEXT_PUBLIC_CONTADOR_ID
+    }).then(()=>{
+      setContador("")
+      setOpenPopUp2(true)
     })
   }
 
@@ -35,7 +39,7 @@ export default function Configuracion() {
       setUsuario("")
       setPassword("")
       setOpenPopUp(true)
-      setActualizar(!actualizar)
+      setActualizar(true)
     })
   }
   
@@ -73,6 +77,12 @@ export default function Configuracion() {
         setOpenPopUp={setOpenPopUp}
       >
         <MensajeModal mensaje="Usuario Creado"></MensajeModal>
+      </ModalPopUp>
+      <ModalPopUp
+        openPopUp={openPopUp2}
+        setOpenPopUp={setOpenPopUp2}
+      >
+        <MensajeModal mensaje="Numero de Pedido Actualizado"></MensajeModal>
       </ModalPopUp>
       <div className={styles.superContainer}>
         <div className={styles.container}>
