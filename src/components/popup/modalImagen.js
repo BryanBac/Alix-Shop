@@ -17,7 +17,7 @@ export default function ModalImagen(props) {
                     setOpenPopUp(false);
                 }}
             >
-                Aceptar
+                Cerrar
             </button>
         </div>
     </>)

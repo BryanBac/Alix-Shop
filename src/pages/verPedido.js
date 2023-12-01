@@ -13,11 +13,13 @@ import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
 import ErrorModal from "@/components/popup/modarError";
 import ModalImagen from "@/components/popup/modalImagen";
+import ModalPedido from "@/components/popup/modalPedidoTabla";
 import { storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import Image from "next/image";
+import TablaUsuario from "@/components/tablaPedidosUsuario";
 import modificarDocumento from "./api/firebase/update-data";
+import TablaPedidosUsuario from "@/components/tablaPedidosUsuario";
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -38,6 +40,7 @@ export default function VerPedido() {
     const [openPopUp, setOpenPopUp] = useState(false)
     const [openPopUp2, setOpenPopUp2] = useState(false)
     const [openPopUp3, setOpenPopUp3] = useState(false)
+    const [openPopUp4, setOpenPopUp4] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
     const [contador, setContador] = useState(0)
     const router = useRouter()
@@ -49,6 +52,9 @@ export default function VerPedido() {
     const [clientes, setClientes] = useState([]) // aquí van todos los clientes
     const [clienteDrop, setClienteDrop] = useState("") // aquí va el id del cliente seleccionado
     const [clienteNombre, setClienteNombre] = useState("") // aquí va el nombre del cliente
+    const [clienteTelefono, setClienteTelefono] = useState("")
+    const [clienteDirección, setClienteDirección] = useState("")
+    const [clienteObt, setClienteObt] = useState()
     // codigos
     const [codeAli, setCodeAli] = useState("")
     const [codeMail, setCodeMail] = useState("")
@@ -83,6 +89,17 @@ export default function VerPedido() {
     const [file, setFile] = useState(null);
     const [tamañoImagen, setTamañoImagen] = useState(250)
     const [abrirImagen, setAbrirImagen] = useState(false)
+    //
+    const [allData, setAllData] = useState([]);
+    const [dataFiltrada, setDataFiltrada] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('allData');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
+
     function handleChange(e) {
         setFile(e.target.files[0]);
         setPreview(URL.createObjectURL(e.target.files[0]));
@@ -126,75 +143,160 @@ export default function VerPedido() {
     }
 
     const modificarPedido = () => {
-        console.log(aliShein)
         if (aliShein != "Aliexpress" && aliShein != "Shein") {
             setOpenPopUp3(true)
         } else {
-            const refImagen = ref(storage, `/${file.name + v4()}`);
-            uploadBytes(refImagen, file).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    let pedido = {
-                        origen: aliShein,
-                        clienteId: clienteDrop,
-                        clienteNombre: clienteNombre,
-                        fechaPedido: fechaHoy,
-                        fechaAprox: fechaAprox,
-                        codeAli: codeAli,
-                        codeMail: codeMail,
-                        codeRastreo: codeRastreo,
-                        anticipo: anticipo,
-                        estado: estado,
-                        fechaFinal: fechaFinal,
-                        costoTotal: costoT,
-                        precioTotal: total,
-                        productos: productos,
-                        recibe: recibe,
-                        envio: envio,
-                        imagen: url,
-                        contador: contador,
-                    }
-                    modificarDocumento(idPedido,aliShein,pedido)
-                    vaciar()
-                    setOpenPopUp(true)
+            let c = {
+                nombre: clienteObt.nombre,
+                username: clienteObt.username,
+                direccion: clienteDirección,
+                cant_pedidos: clienteObt.cant_pedidos,
+                telefono: clienteTelefono
+            }
+            modificarDocumento(clienteDrop, "clientes", c)
+            if (file != null) {
+                const refImagen = ref(storage, `/${file.name + v4()}`);
+                uploadBytes(refImagen, file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        let pedido = {
+                            origen: aliShein,
+                            clienteId: clienteDrop,
+                            clienteNombre: clienteNombre,
+                            fechaPedido: fechaHoy,
+                            fechaAprox: fechaAprox,
+                            codeAli: codeAli,
+                            codeMail: codeMail,
+                            codeRastreo: codeRastreo,
+                            anticipo: Number(anticipo),
+                            estado: estado,
+                            fechaFinal: fechaFinal,
+                            costoTotal: costoT,
+                            precioTotal: total,
+                            productos: productos,
+                            recibe: recibe,
+                            envio: envio,
+                            imagen: url,
+                            telefono: clienteTelefono,
+                            direccion: clienteDirección,
+                            contador: contador,
+                        }
+                        modificarDocumento(idPedido, aliShein, pedido)
+                        vaciar()
+                        setOpenPopUp(true)
+                    });
                 });
-            });
+            } else {
+                let pedido = {
+                    origen: aliShein,
+                    clienteId: clienteDrop,
+                    clienteNombre: clienteNombre,
+                    fechaPedido: fechaHoy,
+                    fechaAprox: fechaAprox,
+                    codeAli: codeAli,
+                    codeMail: codeMail,
+                    codeRastreo: codeRastreo,
+                    anticipo: Number(anticipo),
+                    estado: estado,
+                    fechaFinal: fechaFinal,
+                    costoTotal: costoT,
+                    precioTotal: total,
+                    productos: productos,
+                    recibe: recibe,
+                    envio: envio,
+                    imagen: "",
+                    telefono: clienteTelefono,
+                    direccion: clienteDirección,
+                    contador: contador,
+                }
+                modificarDocumento(idPedido, aliShein, pedido)
+                vaciar()
+                setOpenPopUp(true)
+            }
+
         }
 
     }
     const modificarPedido2 = () => {
-        if (aliShein != "Aliexpress" || aliShein != "Shein") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
-            const refImagen = ref(storage, `/${file.name + v4()}`);
-            uploadBytes(refImagen, file).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    let pedido = {
-                        origen: aliShein,
-                        clienteId: clienteDrop,
-                        clienteNombre: clienteNombre,
-                        fechaPedido: fechaHoy,
-                        fechaAprox: fechaAprox,
-                        codeAli: codeAli,
-                        codeMail: codeMail,
-                        codeRastreo: codeRastreo,
-                        anticipo: anticipo,
-                        estado: estado,
-                        fechaFinal: fechaFinal,
-                        costoTotal: costoT,
-                        precioTotal: total,
-                        productos: productos,
-                        recibe: recibe,
-                        envio: envio,
-                        imagen: url,
-                        contador: contador
-                    }
-                    modificarDocumento(idPedido,aliShein,pedido)
-                    vaciar()
-                    setOpenPopUp2(true)
+            let c = {
+                nombre: clienteObt.nombre,
+                username: clienteObt.username,
+                direccion: clienteDirección,
+                cant_pedidos: clienteObt.cant_pedidos,
+                telefono: clienteTelefono
+            }
+            modificarDocumento(clienteDrop, "clientes", c)
+            if (file != null) {
+                const refImagen = ref(storage, `/${file.name + v4()}`);
+                uploadBytes(refImagen, file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        let pedido = {
+                            origen: aliShein,
+                            clienteId: clienteDrop,
+                            clienteNombre: clienteNombre,
+                            fechaPedido: fechaHoy,
+                            fechaAprox: fechaAprox,
+                            codeAli: codeAli,
+                            codeMail: codeMail,
+                            codeRastreo: codeRastreo,
+                            anticipo: Number(anticipo),
+                            estado: estado,
+                            fechaFinal: fechaFinal,
+                            costoTotal: costoT,
+                            precioTotal: total,
+                            productos: productos,
+                            recibe: recibe,
+                            envio: envio,
+                            imagen: url,
+                            telefono: clienteTelefono,
+                            direccion: clienteDirección,
+                            contador: contador,
+                        }
+                        modificarDocumento(idPedido, aliShein, pedido)
+                        vaciar()
+                        setOpenPopUp2(true)
+                    });
                 });
-            });
+            } else {
+                let pedido = {
+                    origen: aliShein,
+                    clienteId: clienteDrop,
+                    clienteNombre: clienteNombre,
+                    fechaPedido: fechaHoy,
+                    fechaAprox: fechaAprox,
+                    codeAli: codeAli,
+                    codeMail: codeMail,
+                    codeRastreo: codeRastreo,
+                    anticipo: Number(anticipo),
+                    estado: estado,
+                    fechaFinal: fechaFinal,
+                    costoTotal: costoT,
+                    precioTotal: total,
+                    productos: productos,
+                    recibe: recibe,
+                    envio: envio,
+                    imagen: "",
+                    telefono: clienteTelefono,
+                    direccion: clienteDirección,
+                    contador: contador,
+                }
+                modificarDocumento(idPedido, aliShein, pedido)
+                vaciar()
+                setOpenPopUp2(true)
+            }
+
         }
     }
+    useEffect(() => {
+        if (allData.length > 0 && clienteNombre != "") {
+            const documentosFiltrados = allData.filter(documento =>
+                documento.clienteNombre === clienteNombre
+            );
+            setDataFiltrada(documentosFiltrados)
+        }
+    }, [allData, clienteNombre])
 
     useEffect(() => {
         if (aliShein == "Aliexpress") {
@@ -213,21 +315,29 @@ export default function VerPedido() {
         }
     }, [])
 
-    useEffect(()=>{
-        if(idPedido!=""&& origenPedido!=""){
-            obtenerPorId(origenPedido, idPedido).then((item)=>setPedidoObtenido(item))
+    useEffect(() => {
+        if (idPedido != "" && origenPedido != "") {
+            obtenerPorId(origenPedido, idPedido).then((item) => setPedidoObtenido(item))
         }
-    },[idPedido, origenPedido])
+    }, [idPedido, origenPedido])
 
-    useEffect(()=>{
-        if(typeof pedidoObtenido!="undefined"){
+    useEffect(() => {
+        console.log("ClienteID", clienteDrop)
+        if (clienteDrop != "") {
+            obtenerPorId("clientes", clienteDrop).then((item) => setClienteObt(item))
+        }
+    }, [clienteDrop])
+
+
+    useEffect(() => {
+        if (typeof pedidoObtenido != "undefined") {
             setAliShein(pedidoObtenido.origen)
-            setClienteDrop(pedidoObtenido.id)
+            setClienteDrop(pedidoObtenido.clienteId)
             setClienteNombre(pedidoObtenido.clienteNombre)
             setFechaHoy(pedidoObtenido.fechaPedido)
             setFechaAprox(pedidoObtenido.fechaAprox)
             setEstado(pedidoObtenido.estado)
-            if(pedidoObtenido.imagen!=""){
+            if (pedidoObtenido.imagen != "") {
                 setPreview(pedidoObtenido.imagen)
             }
             setFechaFinal(pedidoObtenido.fechaFinal)
@@ -238,10 +348,12 @@ export default function VerPedido() {
             setEnvio(pedidoObtenido.envio)
             setRecibe(pedidoObtenido.recibe)
             setContador(pedidoObtenido.contador)
-            
-        }else{
+            setClienteTelefono(pedidoObtenido.telefono)
+            setClienteDirección(pedidoObtenido.direccion)
+
+        } else {
         }
-    },[pedidoObtenido])
+    }, [pedidoObtenido])
 
     useEffect(() => {
         if (estado == "Entregado") {
@@ -278,6 +390,12 @@ export default function VerPedido() {
                 <ErrorModal error="Elije AliExpress/Shein"></ErrorModal>
             </ModalPopUp>
             <ModalPopUp
+                openPopUp={openPopUp4}
+                setOpenPopUp={setOpenPopUp4}
+            >
+                <ModalPedido data={dataFiltrada}></ModalPedido>
+            </ModalPopUp>
+            <ModalPopUp
                 openPopUp={abrirImagen}
                 setOpenPopUp={setAbrirImagen}
             >
@@ -296,6 +414,14 @@ export default function VerPedido() {
                                 <div className={styles.square2}>
                                     {clienteNombre}
                                 </div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Telefono</div></div>
+                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setClienteTelefono(e.target.value)} value={clienteTelefono}></textarea></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Dirección</div></div>
+                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setClienteDirección(e.target.value)} value={clienteDirección}></textarea></div>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Fecha Pedido</div></div>
@@ -323,6 +449,9 @@ export default function VerPedido() {
                             </div>
                         </div>
                         <div className={styles.selectorContainer}>
+                            <div className={styles.buttonC}>
+                                <button className={styles.button} onClick={() => setOpenPopUp4(true)}>Ver Pedidos Realizados</button>
+                            </div>
                             <label htmlFor="fileInput" className={styles.button5}>
                                 Agregar Guía
                             </label>
@@ -373,7 +502,7 @@ export default function VerPedido() {
                     </div>
                     <div className={styles.botones}>
                         <div className={styles.imagenContainer}>
-                            <button  className="boton-sin" onClick={() => setAbrirImagen(true)}>
+                            <button className="boton-sin" onClick={() => setAbrirImagen(true)}>
                                 <img
                                     src={preview}
                                     className={styles.imagen}

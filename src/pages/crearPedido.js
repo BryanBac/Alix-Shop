@@ -47,6 +47,8 @@ export default function CrearPedido() {
     const [clientes, setClientes] = useState([]) // aquí van todos los clientes
     const [clienteDrop, setClienteDrop] = useState("") // aquí va el id del cliente seleccionado
     const [clienteNombre, setClienteNombre] = useState("") // aquí va el nombre del cliente
+    const [clienteTelefono, setClienteTelefono] = useState("")
+    const [clienteDirección, setClienteDirección] = useState("")
     // codigos
     const [codeAli, setCodeAli] = useState("")
     const [codeMail, setCodeMail] = useState("")
@@ -143,14 +145,14 @@ export default function CrearPedido() {
     }
     const crearPedido = () => {
         console.log(aliShein)
-        if (aliShein != "Aliexpress" && aliShein != "Shein") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let anti = 0;
             if(typeof anticipo=="undefined"){
                 anti=0;
             }else{
-                anti=anticipo
+                anti=Number(anticipo)
             }
             let pedido = {
                 contador: contador[0].contador + 1,
@@ -170,6 +172,8 @@ export default function CrearPedido() {
                 productos: productos,
                 recibe: recibe,
                 envio: envio,
+                telefono: clienteTelefono,
+                direccion: clienteDirección,
                 imagen: ""
             }
             contador[0].contador = contador[0].contador + 1;
@@ -181,14 +185,14 @@ export default function CrearPedido() {
 
     }
     const crearPedido2 = () => {
-        if (aliShein != "Aliexpress" || aliShein != "Shein") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let anti = 0;
             if(typeof anticipo=="undefined"){
                 anti=0;
             }else{
-                anti=anticipo
+                anti=Number(anticipo)
             }
             let pedido = {
                 contador: contador[0].contador + 1,
@@ -208,6 +212,8 @@ export default function CrearPedido() {
                 productos: productos,
                 recibe: recibe,
                 envio: envio,
+                telefono: clienteTelefono,
+                direccion: clienteDirección,
                 imagen: ""
             }
             contador[0].contador = contador[0].contador + 1;
@@ -241,6 +247,10 @@ export default function CrearPedido() {
             setFechaFinal("")
         }
     }, [estado])
+
+    useEffect(()=>{
+        console.log("ClienteID", clienteDrop)
+    },[clienteDrop])
     return (
         <>
             <Head>
@@ -282,10 +292,20 @@ export default function CrearPedido() {
                                     <DropdownFiltered
                                         setClienteNombre={setClienteNombre}
                                         clienteNombre={clienteNombre}
+                                        setClienteTelefono={setClienteTelefono}
+                                        setClienteDirección={setClienteDirección}
                                         onSelect={setClienteDrop}
                                     />
                                 </div>
                                 <div><button onClick={() => setAgregarCliente(!agregarCliente)}>+</button></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Telefono</div></div>
+                                <div className={styles.square2}>{clienteTelefono}</div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Dirección</div></div>
+                                <div className={styles.square2}>{clienteDirección}</div>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Fecha Pedido</div></div>

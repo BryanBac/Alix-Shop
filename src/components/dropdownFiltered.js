@@ -2,7 +2,7 @@ import styles from '@/styles/Dropdown.module.css'
 import obtener from '@/pages/api/firebase/get-data';
 import { useState, useEffect } from "react";
 
-export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNombre }) {
+export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNombre,setClienteTelefono, setClienteDirección }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [clientes, setClientes] = useState([])
     const [buscar, setBuscar] = useState([])
@@ -40,6 +40,8 @@ export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNo
         let x = option.nombre + "---" + option.username
         setNombre(x)
         setClienteNombre(x)
+        setClienteTelefono(option.telefono)
+        setClienteDirección(option.direccion)
         onSelect(option.id);
     };
 

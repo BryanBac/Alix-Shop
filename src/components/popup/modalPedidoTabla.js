@@ -1,10 +1,11 @@
-import styles from '@/styles/ModalCC.module.css'
+import styles from '@/styles/ModalImagen.module.css'
+import TablaUsuario from '../tablaPedidosUsuario';
 
-export default function ErrorModal(props) {
-    const { setOpenPopUp, error } = props
+export default function ModalPedido(props) {
+    const { setOpenPopUp, data } = props
     return (<>
         <div>
-            <div className={styles.titulosError}>{error}</div>
+            <TablaUsuario data={data}></TablaUsuario>
         </div>
         <div className={styles.centrar}>
             <button

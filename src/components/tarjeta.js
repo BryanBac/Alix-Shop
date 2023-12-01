@@ -1,10 +1,11 @@
 import styles from '@/styles/Tarjeta.module.css'
 import { useRouter } from 'next/router'
 
-export default function Tarjeta({ numero, nombre,  fecha, origen, idPedido }) {
+export default function Tarjeta({ numero, nombre,  fecha, origen, idPedido, data }) {
     const router = useRouter()
     const setear = () => {
         if (typeof window !== 'undefined' && window.sessionStorage) {
+            sessionStorage.setItem("allData", JSON.stringify(data))
             sessionStorage.setItem("idPedido", idPedido)
             sessionStorage.setItem("origenPedido", origen)
             router.push("verPedido")

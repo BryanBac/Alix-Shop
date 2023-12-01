@@ -11,10 +11,12 @@ import { useRouter } from "next/router";
 
 export default function VerPedidos() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [aliexpress, setAliexpress] = useState([])
   const [selectedSources, setSelectedSources] = useState([]);
+  const [aliexpress, setAliexpress] = useState([])
   const [shein, setShein] = useState([])
+  const [stock, setStock] = useState([])
   const [buscar, setBuscar] = useState([])
+  const [allData, setAllData] = useState([])
   const [agregado, setAgregado] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
   const router = useRouter()
@@ -43,26 +45,57 @@ export default function VerPedidos() {
       console.error("Error fetching data:", error);
     }
   };
+  const fetchStock = async () => {
+    try {
+      const result = await obtener("Stock");
+      setStock(result);
+    } catch (error) {
+      // Handle the error if needed
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const Busqueda = (e) => {
     const valor = e.target.value;
-    if(valor!=""){
+    if (valor != "") {
       setBuscar(filtrarPedidos(valor));
-    }else{
-      if(selectedSources.length>=2){
-        const combinedArray = [...aliexpress, ...shein]
-        // debo ordenarlos por fecha
+    } else {
+      const a = [...aliexpress, ...shein, ...stock]
+      const ar = a.sort((a, b) => b.contador - a.contador);
+      setAllData(ar)
+      if (selectedSources.length == 3) {
+        const combinedArray = [...aliexpress, ...shein, ...stock]
         const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
         setBuscar(reordenArray)
-      }else if(selectedSources.length==1){
-        if(selectedSources[0]=="AliExpress"){
-          const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+      }
+      else if (selectedSources.length == 2) {
+        if ((selectedSources[0] == "Shein" && selectedSources[1] == "AliExpress") || (selectedSources[0] == "AliExpress" && selectedSources[1] == "Shein")) {
+          const combinedArray = [...aliexpress, ...shein]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
           setBuscar(reordenArray)
-        }else{
-          const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+        } else if ((selectedSources[0] == "Shein" && selectedSources[1] == "Stock") || (selectedSources[0] == "Stock" && selectedSources[1] == "Shein")) {
+          const combinedArray = [...stock, ...shein]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else {
+          const combinedArray = [...stock, ...aliexpress]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
           setBuscar(reordenArray)
         }
-      }else{
+      } else if (selectedSources.length == 1) {
+        if (selectedSources[0] == "AliExpress") {
+          const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else if (selectedSources[0] == "Shein") {
+          const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else if (selectedSources[0] == "Stock") {
+          const reordenArray = stock.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else {
+          setBuscar([])
+        }
+      } else {
         setBuscar([])
       }
     }
@@ -71,40 +104,84 @@ export default function VerPedidos() {
   useEffect(() => {
     fetchAliexpress()
     fetchShein()
+    fetchStock();
   }, [agregado])
 
-  useEffect(()=>{
-    if(aliexpress.length>0&& shein.length>0){
-      const combinedArray = [...aliexpress, ...shein]
+  useEffect(() => {
+    const a = [...aliexpress, ...shein, ...stock]
+    const ar = a.sort((a, b) => b.contador - a.contador);
+    setAllData(ar)
+    if (aliexpress.length > 0 && shein.length > 0 && stock.length > 0) { // si los 3 ya están
+      const combinedArray = [...aliexpress, ...shein, ...stock]
       const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
       setBuscar(reordenArray)
-    }else if(aliexpress.length>0&&shein.length<=0){
+    } else if (aliexpress.length > 0 && shein.length <= 0 && stock.length <= 0) { // si ali express ya, pero los demás no
       const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
       setBuscar(reordenArray)
-    }else if(aliexpress.length<=0&&shein.length>0){
+    } else if (aliexpress.length <= 0 && shein.length > 0 && stock.length <= 0) {
       const reordenArray = shein.sort((a, b) => b.contador - a.contador);
       setBuscar(reordenArray)
-    }
-  },[aliexpress, shein])
-
-  useEffect(()=>{
-    if(selectedSources.length>=2){
+    } else if (aliexpress.length <= 0 && shein.length <= 0 && stock.length > 0) {
+      const reordenArray = stock.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    } else if (aliexpress.length > 0 && shein.length > 0 && stock.length <= 0) {
       const combinedArray = [...aliexpress, ...shein]
-      // debo ordenarlos por fecha
       const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
       setBuscar(reordenArray)
-    }else if(selectedSources.length==1){
-      if(selectedSources[0]=="AliExpress"){
-        const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
-        setBuscar(reordenArray)
-      }else{
-        const reordenArray = shein.sort((a, b) => b.contador - a.contador);
-        setBuscar(reordenArray)
-      }
-    }else{
+    } else if (aliexpress.length > 0 && shein.length <= 0 && stock.length > 0) {
+      const combinedArray = [...aliexpress, ...stock]
+      const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    } else if (aliexpress.length <= 0 && shein.length > 0 && stock.length > 0) {
+      const combinedArray = [...shein, ...stock]
+      const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    } else {
       setBuscar([])
     }
-  },[selectedSources])
+
+  }, [aliexpress, shein, stock])
+
+  useEffect(() => {
+    const a = [...aliexpress, ...shein, ...stock]
+    const ar = a.sort((a, b) => b.contador - a.contador);
+    setAllData(ar)
+    if (selectedSources.length == 3) {
+      const combinedArray = [...aliexpress, ...shein, ...stock]
+      const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+      setBuscar(reordenArray)
+    }
+    else if (selectedSources.length == 2) {
+      if ((selectedSources[0] == "Shein" && selectedSources[1] == "AliExpress") || (selectedSources[0] == "AliExpress" && selectedSources[1] == "Shein")) {
+        const combinedArray = [...aliexpress, ...shein]
+        const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      } else if ((selectedSources[0] == "Shein" && selectedSources[1] == "Stock") || (selectedSources[0] == "Stock" && selectedSources[1] == "Shein")) {
+        const combinedArray = [...stock, ...shein]
+        const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      } else {
+        const combinedArray = [...stock, ...aliexpress]
+        const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      }
+    } else if (selectedSources.length == 1) {
+      if (selectedSources[0] == "AliExpress") {
+        const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      } else if (selectedSources[0] == "Shein") {
+        const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      } else if (selectedSources[0] == "Stock") {
+        const reordenArray = stock.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      } else {
+        setBuscar([])
+      }
+    } else {
+      setBuscar([])
+    }
+  }, [selectedSources])
 
   return (
     <>
@@ -126,7 +203,7 @@ export default function VerPedidos() {
           <div className={styles.barraClientes}>
             <div className={styles.inputC}>
               <div className={styles.square1}>Buscar</div>
-              <div className={styles.square2}><textarea type="text" className={styles.inp}  onChange={(e) => Busqueda(e)}></textarea></div>
+              <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)}></textarea></div>
             </div>
             <div className={styles.buttonC}>
               <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
@@ -164,10 +241,24 @@ export default function VerPedidos() {
             <label>
               <input
                 type="checkbox"
-                checked={selectedSources.length === 2}
+                checked={selectedSources.includes('Stock')}
                 onChange={() => {
                   setSelectedSources((prev) =>
-                    prev.length === 2 ? [] : ['AliExpress', 'Shein']
+                    prev.includes('Stock')
+                      ? prev.filter((source) => source !== 'Stock')
+                      : [...prev, 'Stock']
+                  );
+                }}
+              />
+              Stock
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={selectedSources.length === 3}
+                onChange={() => {
+                  setSelectedSources((prev) =>
+                    prev.length === 3 ? [] : ['AliExpress', 'Shein', 'Stock']
                   );
                 }}
               />
@@ -175,8 +266,8 @@ export default function VerPedidos() {
             </label>
           </div>
           <div className={styles.grillaTarjetas}>
-            {buscar.map((item)=>(
-              <Tarjeta origen={item.origen}key={item.id} numero={item.contador} nombre={item.clienteNombre}fecha={item.fechaPedido} idPedido={item.id}></Tarjeta>
+            {buscar.map((item) => (
+              <Tarjeta data={allData} origen={item.origen} key={item.id} numero={item.contador} nombre={item.clienteNombre} fecha={item.fechaPedido} idPedido={item.id}></Tarjeta>
             ))}
           </div>
         </div>
