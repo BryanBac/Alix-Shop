@@ -145,14 +145,14 @@ export default function CrearPedido() {
     }
     const crearPedido = () => {
         console.log(aliShein)
-        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let anti = 0;
-            if(typeof anticipo=="undefined"){
-                anti=0;
-            }else{
-                anti=Number(anticipo)
+            if (typeof anticipo == "undefined") {
+                anti = 0;
+            } else {
+                anti = Number(anticipo)
             }
             let pedido = {
                 contador: contador[0].contador + 1,
@@ -185,14 +185,14 @@ export default function CrearPedido() {
 
     }
     const crearPedido2 = () => {
-        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let anti = 0;
-            if(typeof anticipo=="undefined"){
-                anti=0;
-            }else{
-                anti=Number(anticipo)
+            if (typeof anticipo == "undefined") {
+                anti = 0;
+            } else {
+                anti = Number(anticipo)
             }
             let pedido = {
                 contador: contador[0].contador + 1,
@@ -249,8 +249,17 @@ export default function CrearPedido() {
     }, [estado])
 
     useEffect(()=>{
-        console.log("ClienteID", clienteDrop)
-    },[clienteDrop])
+        if(productos.length>0){
+            let prT = 0
+            let costT = 0
+            for (let i = 0; i<productos.length; i++){
+                prT += Number(productos[i].precio)
+                costT += Number(productos[i].costo)
+            }
+            setTotal(prT)
+            setCostoT(costT)
+        }
+    }, [productos])
     return (
         <>
             <Head>
@@ -264,13 +273,13 @@ export default function CrearPedido() {
                 openPopUp={openPopUp}
                 setOpenPopUp={setOpenPopUp}
             >
-                <CreatePedidoModal></CreatePedidoModal>
+                <CreatePedidoModal mensaje="Creado Exitosamente" numeroPedido={contador[0].contador + 1}></CreatePedidoModal>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp2}
                 setOpenPopUp={setOpenPopUp2}
             >
-                <CreatePedidoModal2></CreatePedidoModal2>
+                <CreatePedidoModal2 mensaje="Creado Exitosamente" numeroPedido={contador[0].contador + 1}></CreatePedidoModal2>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp3}
@@ -365,7 +374,7 @@ export default function CrearPedido() {
                                 </div>
                             </div>
                             <div>
-                                <TablaProductos data={productos}></TablaProductos>
+                                <TablaProductos data={productos} setData={setProductos}></TablaProductos>
                             </div>
                         </div>
                     </div>

@@ -6,8 +6,24 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import styles from '@/styles/Tabla.module.css'
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from "react";
 
-export default function TablaProductos({ data }) {
+export default function TablaProductos({ data, setData }) {
+    const handleInputChange = (e, rowIndex, key) => {
+        const updatedData = data.map((product, index) => {
+            if (index === rowIndex) {
+                return { ...product, [key]: e.target.value };
+            }
+            return product;
+        });
+        setData(updatedData);
+    };
+    const eliminarFila = (index) => {
+        const updatedData = [...data];
+        updatedData.splice(index, 1);
+        setData(updatedData);
+    };
     return (
         <>
             <div className="scroller">
@@ -45,40 +61,52 @@ export default function TablaProductos({ data }) {
                                         Codigo Rastreo
                                     </div>
                                 </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((row) => (
+                            {data.map((row, rowIndex) => (
                                 <TableRow key={row.id}>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.producto}
-                                        </div>
+                                        <textarea value={row.producto} className={styles.celdaRow} onChange={(e)=>{
+                                           handleInputChange(e, rowIndex, 'producto')
+                                        }}></textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.costo}
-                                        </div>
+                                        <textarea value={row.costo} className={styles.celdaRow} onChange={(e)=>{
+                                            handleInputChange(e, rowIndex, 'costo')
+                                        }}>
+                                        </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.precio}
-                                        </div>
+                                        <textarea value={row.precio} className={styles.celdaRow} onChange={(e)=>{
+                                            handleInputChange(e, rowIndex, 'precio')
+                                        }}>
+                                        </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.codeAli}
-                                        </div>
+                                        <textarea value={row.codeAli} className={styles.celdaRow} onChange={(e)=>{
+                                            handleInputChange(e, rowIndex, 'codeAli')
+                                        }}>
+                                        </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.codeMail}
-                                        </div>
+                                        <textarea value={row.codeMail} className={styles.celdaRow} onChange={(e)=>{
+                                            handleInputChange(e, rowIndex, 'codeMail')
+                                        }}>
+                                        </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <div className={styles.celdaRow}>
-                                            {row.codeRastreo}
-                                        </div>
+                                        <textarea value={row.codeRastreo} className={styles.celdaRow} onChange={(e)=>{
+                                            handleInputChange(e, rowIndex, 'codeRastreo')
+                                        }}>
+                                        </textarea>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <button onClick={()=>eliminarFila(rowIndex)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
                                     </TableCell>
                                 </TableRow>
                             ))}

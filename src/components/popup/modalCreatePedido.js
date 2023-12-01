@@ -2,11 +2,13 @@ import styles from '@/styles/ModalCC.module.css'
 import { useRouter } from 'next/router';
 
 export default function CreatePedidoModal(props) {
-    const { setOpenPopUp } = props
+    const { setOpenPopUp, mensaje, numeroPedido } = props
     const router = useRouter()
     return (<>
         <div>
-            <div className={styles.titulos}>¡Pedido agregado con éxito!</div>
+            <div className={styles.titulos}>Pedido #{numeroPedido}</div>
+            <div className={styles.titulos}>{mensaje}</div>
+            
         </div>
         <div className={styles.centrar}>
             <button

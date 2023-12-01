@@ -145,7 +145,7 @@ export default function VerPedido() {
     }
 
     const modificarPedido = () => {
-        if (aliShein != "Aliexpress" && aliShein != "Shein") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let c = {
@@ -365,6 +365,18 @@ export default function VerPedido() {
             setFechaFinal("")
         }
     }, [estado])
+    useEffect(()=>{
+        if(productos.length>0){
+            let prT = 0
+            let costT = 0
+            for (let i = 0; i<productos.length; i++){
+                prT += Number(productos[i].precio)
+                costT += Number(productos[i].costo)
+            }
+            setTotal(prT)
+            setCostoT(costT)
+        }
+    }, [productos])
     return (
         <>
             <Head>
@@ -378,13 +390,13 @@ export default function VerPedido() {
                 openPopUp={openPopUp}
                 setOpenPopUp={setOpenPopUp}
             >
-                <CreatePedidoModal></CreatePedidoModal>
+                <CreatePedidoModal mensaje="Actualizado Exitosamente" numeroPedido={contador}></CreatePedidoModal>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp2}
                 setOpenPopUp={setOpenPopUp2}
             >
-                <CreatePedidoModal2></CreatePedidoModal2>
+                <CreatePedidoModal2 mensaje="Actualizado Exitosamente" numeroPedido={contador}></CreatePedidoModal2>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp3}
@@ -459,7 +471,9 @@ export default function VerPedido() {
                         </div>
                         <div className={styles.selectorContainer}>
                             <div className={styles.buttonC}>
-                                <button className={styles.button} onClick={() => setOpenPopUp4(true)}>Ver Pedidos Realizados</button>
+                                <button className={styles.button} onClick={() => {
+                                    setOpenPopUp4(true)
+                                }}>Ver Pedidos Realizados</button>
                             </div>
                             <label htmlFor="fileInput" className={styles.button5}>
                                 Agregar Guía
@@ -505,7 +519,7 @@ export default function VerPedido() {
                                 </div>
                             </div>
                             <div>
-                                <TablaProductos data={productos}></TablaProductos>
+                                <TablaProductos data={productos} setData={setProductos}></TablaProductos>
                             </div>
                         </div>
                     </div>
