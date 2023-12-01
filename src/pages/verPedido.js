@@ -414,7 +414,7 @@ export default function VerPedido() {
                 openPopUp={openPopUp5}
                 setOpenPopUp={setOpenPopUp5}
             >
-                <EliminarPedido id={idPedido} coleccion={aliShein}></EliminarPedido>
+                <EliminarPedido id={idPedido} coleccion={aliShein} ruta="verPedidos"></EliminarPedido>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={abrirImagen}

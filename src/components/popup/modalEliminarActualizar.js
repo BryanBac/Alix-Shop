@@ -2,8 +2,8 @@ import styles from '@/styles/ModalCC.module.css'
 import { useRouter } from 'next/router';
 import eliminarDocumento from '@/pages/api/firebase/delete-data';
 
-export default function EliminarPedido(props) {
-    const { setOpenPopUp, id, coleccion, ruta } = props
+export default function EliminarActualizar(props) {
+    const { setOpenPopUp, id, coleccion, ruta, actualizar, setActualizar } = props
     console.log(id)
     const router = useRouter()
     return (<>
@@ -25,8 +25,8 @@ export default function EliminarPedido(props) {
                 type=""
                 onClick={() => {
                     eliminarDocumento(coleccion, id).then(() => {
+                        setActualizar(!actualizar)
                         setOpenPopUp(false);
-                        router.push(ruta)
                     })
                 }}
             >
