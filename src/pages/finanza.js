@@ -141,8 +141,14 @@ export default function VerClientes() {
       setAnticipos(anti)
       setGanancia(t - c)
       setGReal(anti-c)
+    }else{
+      setPrecioTotal(0)
+      setCostoTotal(0)
+      setAnticipos(0)
+      setGanancia(0)
+      setGReal(0)
     }
-  }, [pedidosMes])
+  }, [pedidosMes, fecha])
 
   return (
     <>

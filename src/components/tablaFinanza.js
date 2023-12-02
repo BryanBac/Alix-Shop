@@ -52,7 +52,12 @@ export default function TablaFinanza({ data }) {
                                 </TableCell>
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
-                                        Ganacia/Perdida
+                                        Ganacia/Perdida Esperada
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Ganacia/Perdida Real
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -88,6 +93,11 @@ export default function TablaFinanza({ data }) {
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
                                             {row.precioTotal - row.anticipo}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={`${styles.celdaRow} ${styles[calcularColor(row.precioTotal - row.costoTotal)]}`}>
+                                            {row.precioTotal - row.costoTotal}
                                         </div>
                                     </TableCell>
                                     <TableCell align="right">
