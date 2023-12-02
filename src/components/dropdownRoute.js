@@ -15,6 +15,8 @@ export default function DropdownRoute({ options, isDarkMode }) {
             router.push("verPedidos");
         }else if(option=="Crear Pedidos"){
             router.push("crearPedido");
+        }else if(option=="Finanzas"){
+            router.push("finanza");
         }else if(option=="Configurción"){
             router.push("configuracion");
         }else{

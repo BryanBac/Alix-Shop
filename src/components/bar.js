@@ -8,7 +8,7 @@ import DropdownRoute from "./dropdownRoute";
 export default function Bar({ isDarkMode, setIsDarkMode }) {
 
     const [modoC, setModoC] = useState("");
-    const [opciones, setOpciones] = useState(["Inicio", "Clientes", "Ver Pedidos", "Crear Pedidos", "Configurción"])
+    const [opciones, setOpciones] = useState(["Inicio", "Clientes", "Ver Pedidos", "Crear Pedidos", "Finanzas", "Configurción"])
     useEffect(() => {
         document.documentElement.style.setProperty('--identicolor', 'rgb(194, 156, 200, 0.8)');
         if (typeof window !== 'undefined' && window.sessionStorage) {

@@ -28,3 +28,13 @@
 .colorOne {
     background: linear-gradient(to right, rgb(194, 156, 200, 0), rgb(194, 156, 200, 0.25), rgb(194, 156, 200, 0.65), rgb(194, 156, 200, 1.0));
 }
+
+.ganancia{
+    color: green;
+}
+.perdida{
+    color: red
+}
+.neutro{
+    color: black
+}
