@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
 import styles from '@/styles/Dropdown.module.css'
 import DehazeIcon from '@mui/icons-material/Dehaze';
+import { signOut } from 'firebase/auth';
+import { authG } from '../../firebase';
 import { useRouter } from 'next/router';
 
 export default function DropdownRoute({ options, isDarkMode }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const router = useRouter();
+    const handleLogout = async () => {
+        try {
+            await signOut(authG);
+            router.replace('/');
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
     const handleSelect = (option) => {
         if(option=="Inicio"){
             router.push("inicio");
@@ -19,6 +29,8 @@ export default function DropdownRoute({ options, isDarkMode }) {
             router.push("finanza");
         }else if(option=="Configurción"){
             router.push("configuracion");
+        }else if(option=="Cerrar Sesión"){
+            handleLogout();
         }else{
             
         }

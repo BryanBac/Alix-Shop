@@ -1,17 +1,14 @@
-import * as bcrypt from "bcryptjs"
 import obtener from "../firebase/get-data";
-import hashPassword from "./hash";
 
-const autenticar= async (usuario, password) =>{
+const autenticar= async (email) =>{
     let usuarios = await obtener("usuarios")
-    let passwordA=""
     for (let i = 0; i<usuarios.length; i++){
-        if(usuarios[i].usuario===usuario){
-            passwordA=usuarios[i].password
+        if(usuarios[i].email===email){
             sessionStorage.setItem("tipo", usuarios[i].tipo)
+            return true;
         }
     }
-    return(bcrypt.compareSync(password, passwordA))
+    return false;
 }
 
 export default autenticar;

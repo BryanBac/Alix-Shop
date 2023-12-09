@@ -7,6 +7,14 @@ import Tarjeta from "@/components/tarjeta";
 import CreateClientModal from "@/components/popup/modalCreateClient";
 import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+
+const checkAuth = (callback) => {
+  return onAuthStateChanged(authG, (user) => {
+    callback(user);
+  });
+};
 
 
 export default function VerPedidos() {
@@ -19,7 +27,17 @@ export default function VerPedidos() {
   const [allData, setAllData] = useState([])
   const [agregado, setAgregado] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
-  const router = useRouter()
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = checkAuth((user) => {
+      if (!user) {
+        // Redirect to the login page if the user is not logged in
+        router.replace('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const filtrarPedidos = (valorBusqueda) => {
     return buscar.filter(pedido =>

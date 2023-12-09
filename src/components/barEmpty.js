@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import styles from '@/styles/Bar.module.css'
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import DropdownRoute from "./dropdownRoute";
 
-export default function Bar({ isDarkMode, setIsDarkMode }) {
+export default function BarEmpty({ isDarkMode, setIsDarkMode }) {
 
     const [modoC, setModoC] = useState("");
     const [opciones, setOpciones] = useState(["Inicio", "Clientes", "Ver Pedidos", "Crear Pedidos", "Finanzas", "Configurción", "Cerrar Sesión"])
@@ -49,7 +47,6 @@ export default function Bar({ isDarkMode, setIsDarkMode }) {
     return (
         <div className={styles.container}>
             <div className={styles.menu}>
-                <DropdownRoute options={opciones} isDarkMode={isDarkMode}></DropdownRoute>
             </div>
             <div className={styles.barraColor}></div>
             <div className={styles.cambioModo}>

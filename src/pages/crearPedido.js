@@ -15,6 +15,14 @@ import ModalPopUp from "@/components/popup/popup";
 import { useRouter } from "next/router";
 import ErrorModal from "@/components/popup/modarError";
 import modificarDocumento from "./api/firebase/update-data";
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+
+const checkAuth = (callback) => {
+    return onAuthStateChanged(authG, (user) => {
+      callback(user);
+    });
+};
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -76,6 +84,16 @@ export default function CrearPedido() {
     const [recibe, setRecibe] = useState("")
     const [envio, setEnvio] = useState("")
     // comienzan las funciones
+    useEffect(() => {
+        const unsubscribe = checkAuth((user) => {
+          if (!user) {
+            // Redirect to the login page if the user is not logged in
+            router.replace('/');
+          }
+        });
+    
+        return () => unsubscribe();
+      }, []);
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||

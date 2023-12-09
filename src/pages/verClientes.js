@@ -6,6 +6,15 @@ import styles from '@/styles/VerClientes.module.css'
 import TablaClientes from "@/components/tablaClientes";
 import CreateClientModal from "@/components/popup/modalCreateClient";
 import ModalPopUp from "@/components/popup/popup";
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+import { useRouter } from "next/router";
+
+const checkAuth = (callback) => {
+    return onAuthStateChanged(authG, (user) => {
+      callback(user);
+    });
+};
 
 
 export default function VerClientes() {
@@ -15,6 +24,17 @@ export default function VerClientes() {
   const [agregado, setAgregado] = useState(false)
   const [actualizar, setActualizar] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = checkAuth((user) => {
+      if (!user) {
+        // Redirect to the login page if the user is not logged in
+        router.replace('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   const filtrarClientes = (valorBusqueda) => {
     return clientes.filter(cliente =>
       cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||

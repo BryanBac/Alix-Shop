@@ -5,6 +5,15 @@ import obtener from './api/firebase/get-data'
 import DateCalendarValue from "@/components/datePicker";
 import TablaFinanza from "@/components/tablaFinanza";
 import styles from '@/styles/Finanza.module.css'
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+import { useRouter } from "next/router";
+
+const checkAuth = (callback) => {
+    return onAuthStateChanged(authG, (user) => {
+      callback(user);
+    });
+};
 
 
 export default function VerClientes() {
@@ -25,7 +34,17 @@ export default function VerClientes() {
   // las listas
   const [allData, setAllData] = useState([])
   const [pedidosMes, setPedidosMes] = useState([])
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = checkAuth((user) => {
+      if (!user) {
+        // Redirect to the login page if the user is not logged in
+        router.replace('/');
+      }
+    });
 
+    return () => unsubscribe();
+  }, []);
   const obtenerListaFiltrada = (listaCompleta, mes, año) => {
     const listaFiltrada = listaCompleta.filter((item) => {
       // Suponemos que el formato de fechaPedido es dd/mm/yyyy

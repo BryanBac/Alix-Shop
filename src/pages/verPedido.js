@@ -21,6 +21,14 @@ import TablaUsuario from "@/components/tablaPedidosUsuario";
 import modificarDocumento from "./api/firebase/update-data";
 import EliminarPedido from "@/components/popup/modalEliminarPedido";
 import TablaPedidosUsuario from "@/components/tablaPedidosUsuario";
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+
+const checkAuth = (callback) => {
+    return onAuthStateChanged(authG, (user) => {
+        callback(user);
+    });
+};
 
 function obtenerFechaHoy() {
     const fecha = new Date();
@@ -45,7 +53,17 @@ export default function VerPedido() {
     const [openPopUp5, setOpenPopUp5] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
     const [contador, setContador] = useState(0)
-    const router = useRouter()
+    const router = useRouter();
+    useEffect(() => {
+        const unsubscribe = checkAuth((user) => {
+            if (!user) {
+                // Redirect to the login page if the user is not logged in
+                router.replace('/');
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
     // origen
     const [aliShein, setAliShein] = useState("")
     // estado
@@ -145,7 +163,7 @@ export default function VerPedido() {
     }
 
     const modificarPedido = () => {
-        if (aliShein != "Aliexpress" && aliShein != "Shein"  && aliShein != "Stock") {
+        if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
             let c = {
@@ -365,11 +383,11 @@ export default function VerPedido() {
             setFechaFinal("")
         }
     }, [estado])
-    useEffect(()=>{
-        if(productos.length>0){
+    useEffect(() => {
+        if (productos.length > 0) {
             let prT = 0
             let costT = 0
-            for (let i = 0; i<productos.length; i++){
+            for (let i = 0; i < productos.length; i++) {
                 prT += Number(productos[i].precio)
                 costT += Number(productos[i].costo)
             }

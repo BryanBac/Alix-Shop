@@ -46,6 +46,11 @@ export default function TablaUsuarios({ data, setActualizado }) {
                                     </div>
                                 </TableCell>
                                 <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                        Correo
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -55,6 +60,11 @@ export default function TablaUsuarios({ data, setActualizado }) {
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
                                             {row.usuario}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.email}
                                         </div>
                                     </TableCell>
                                     <TableCell align="right">

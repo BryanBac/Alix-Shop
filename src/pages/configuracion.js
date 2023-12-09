@@ -9,6 +9,15 @@ import hashPassword from "./api/auth/hash";
 import MensajeModal from "@/components/popup/MensajeModal";
 import ModalPopUp from "@/components/popup/popup";
 import TablaUsuarios from "@/components/tablaUsuarios";
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+import { useRouter } from "next/router";
+
+const checkAuth = (callback) => {
+  return onAuthStateChanged(authG, (user) => {
+    callback(user);
+  });
+};
 
 export default function Configuracion() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,12 +28,23 @@ export default function Configuracion() {
   const [password, setPassword] = useState("")
   const [openPopUp, setOpenPopUp] = useState(false)
   const [openPopUp2, setOpenPopUp2] = useState(false)
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = checkAuth((user) => {
+      if (!user) {
+        // Redirect to the login page if the user is not logged in
+        router.replace('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const cambiarPedido = () => {
     modificarDocumento(process.env.NEXT_PUBLIC_CONTADOR_ID, "contadorPedido", {
       contador: Number(contador),
       id: process.env.NEXT_PUBLIC_CONTADOR_ID
-    }).then(()=>{
+    }).then(() => {
       setContador("")
       setOpenPopUp2(true)
     })
@@ -33,16 +53,16 @@ export default function Configuracion() {
   const crearUsuario = () => {
     enviar("usuarios", {
       usuario: usuario,
-      password: hashPassword(password),
+      email: password,
       tipo: 1
-    }).then(()=>{
+    }).then(() => {
       setUsuario("")
       setPassword("")
       setOpenPopUp(true)
       setActualizar(true)
     })
   }
-  
+
   const fetchData = async () => {
     try {
       const result = await obtener("usuarios");
@@ -52,16 +72,16 @@ export default function Configuracion() {
       console.error("Error fetching data:", error);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     fetchData()
-  },[])
-  
-  useEffect(()=>{
-    if(actualizar){
+  }, [])
+
+  useEffect(() => {
+    if (actualizar) {
       fetchData()
       setActualizar(false)
     }
-  },[actualizar])
+  }, [actualizar])
 
   return (
     <>
@@ -107,7 +127,7 @@ export default function Configuracion() {
               </div>
             </div>
             <div className={styles.inputC2}>
-              <div className={styles.square1}><div>Contraseña</div></div>
+              <div className={styles.square1}><div>Correo</div></div>
               <div className={styles.square2}>
                 <textarea type="text" className={styles.inp} onChange={(e) => setPassword(e.target.value)} value={password}>
                 </textarea>

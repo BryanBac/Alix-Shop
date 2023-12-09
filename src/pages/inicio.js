@@ -2,9 +2,29 @@ import Bar from "@/components/bar";
 import { useState, useEffect } from "react";
 import Head from 'next/head'
 import styles from '@/styles/Inicio.module.css'
+import { onAuthStateChanged } from 'firebase/auth';
+import { authG } from "../../firebase";
+import { useRouter } from "next/router";
+
+const checkAuth = (callback) => {
+  return onAuthStateChanged(authG, (user) => {
+    callback(user);
+  });
+};
 
 export default function Inicio() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = checkAuth((user) => {
+      if (!user) {
+        // Redirect to the login page if the user is not logged in
+        router.replace('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   return (
     <>
       <Head>
@@ -19,7 +39,7 @@ export default function Inicio() {
           <img className={styles.imagen} src="Logo.png"></img>
         </div>
         <div className={styles.imagenC}>
-            <div className={styles.mensaje}>Bienvenida a AlixShop!!!</div>
+          <div className={styles.mensaje}>Bienvenida a AlixShop!!!</div>
         </div>
       </div>
     </>

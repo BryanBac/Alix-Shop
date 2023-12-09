@@ -7,16 +7,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 500px;
     width: 99vw;
 }
 
 .login {
     background-color: rgb(194, 156, 200, 0.2);
-    height: 60%;
+    height: 50%;
     width: 40%;
     border-radius: 20px;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .imagenC {
