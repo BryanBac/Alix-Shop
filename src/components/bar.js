@@ -6,20 +6,50 @@ import DehazeIcon from '@mui/icons-material/Dehaze';
 import DropdownRoute from "./dropdownRoute";
 
 export default function Bar({ isDarkMode, setIsDarkMode }) {
-
-    const [modoC, setModoC] = useState("");
     const [opciones, setOpciones] = useState(["Inicio", "Clientes", "Ver Pedidos", "Crear Pedidos", "Finanzas", "Usuarios y Permisos", "Cerrar Sesión"])
+    const [modoC, setModoC] = useState("");
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
+    useEffect(()=>{
+        if(permisos.length>0){
+            let list = []
+            if(permisos.includes("Ver Clientes")){
+                list.push("Clientes")
+            }
+            if(permisos.includes("Ver Pedido")){
+                list.push("Ver Pedidos")
+            }
+            if(permisos.includes("Crear Pedido")){
+                list.push("Crear Pedidos")
+            }
+            if(permisos.includes("Ver Finanzas")){
+                list.push("Finanzas")
+            }
+            if(permisos.includes("Ver Usuarios")){
+                list.push("Usuarios y Permisos")
+            }
+            list.push("Cerrar Sesión")
+            setOpciones(list)
+        }
+    },[permisos])
     useEffect(() => {
         document.documentElement.style.setProperty('--identicolor', 'rgb(194, 156, 200, 0.8)');
         if (typeof window !== 'undefined' && window.sessionStorage) {
             setModoC(sessionStorage.getItem("modo"))
             const root = document.documentElement;
-            if(sessionStorage.getItem("modo")=="false"){
+            if (sessionStorage.getItem("modo") == "false") {
                 setIsDarkMode(false)
                 root.style.setProperty('--background-color', '#f4eeee');
                 root.style.setProperty('--text-color', '#333');
-                
-            }else{
+
+            } else {
                 setIsDarkMode(true)
                 root.style.setProperty('--background-color', '#333');
                 root.style.setProperty('--text-color', '#f4eeee');
@@ -36,7 +66,7 @@ export default function Bar({ isDarkMode, setIsDarkMode }) {
                 root.style.setProperty('--text-color', '#f4eeee');
                 sessionStorage.setItem("modo", "true")
                 setModoC("true")
-            }else{
+            } else {
                 root.style.setProperty('--background-color', '#f4eeee');
                 root.style.setProperty('--text-color', '#333');
                 sessionStorage.setItem("modo", "false")

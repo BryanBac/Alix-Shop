@@ -17,16 +17,25 @@ export default function TablaUsuarios({ data, setActualizado }) {
     const [openPopUp, setOpenPopUp] = useState(false)
     const [idUsuario, setIdUsuario] = useState("")
     const [actualizar, setActualizar] = useState(false)
-    const eliminar = (id)=>{
+    const eliminar = (id) => {
         setIdUsuario(id)
         setOpenPopUp(true)
     }
-    useEffect(()=>{
-        if(actualizar==true){
+    useEffect(() => {
+        if (actualizar == true) {
             setActualizado(true)
             setActualizar(false)
         }
-    },[actualizar])
+    }, [actualizar])
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
     return (
         <>
             <ModalPopUp
@@ -50,8 +59,10 @@ export default function TablaUsuarios({ data, setActualizado }) {
                                         Correo
                                     </div>
                                 </TableCell>
-                                <TableCell align="right">
-                                </TableCell>
+                                {permisos.includes("Eliminar Usuarios") &&
+                                    <TableCell align="right">
+                                    </TableCell>
+                                }
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -67,9 +78,11 @@ export default function TablaUsuarios({ data, setActualizado }) {
                                             {row.email}
                                         </div>
                                     </TableCell>
-                                    <TableCell align="right">
-                                        <button onClick={() => eliminar(row.id)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
-                                    </TableCell>
+                                    {permisos.includes("Eliminar Usuarios") &&
+                                        <TableCell align="right">
+                                            <button onClick={() => eliminar(row.id)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
+                                        </TableCell>
+                                    }
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -14,6 +14,15 @@ const checkAuth = (callback) => {
 
 export default function Inicio() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // para los permisos
+  const [permisos, setPermisos] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('permisos');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
   const router = useRouter();
   useEffect(() => {
     const unsubscribe = checkAuth((user) => {

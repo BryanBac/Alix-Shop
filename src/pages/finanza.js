@@ -36,6 +36,26 @@ export default function VerClientes() {
   const [mes, setMes] = useState("")
   const [año, setAño] = useState("")
   const [fecha, setFecha] = useState("")
+  // para los permisos
+  const [permisos, setPermisos] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('permisos');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
+  useEffect(() => {
+    if (permisos.length > 0) {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        if (permisos.includes("Ver Finanzas")) {
+
+        } else {
+          router.replace("/inicio")
+        }
+      }
+    }
+  }, [permisos])
   // las listas
   const [allData, setAllData] = useState([])
   const [pedidosMes, setPedidosMes] = useState([])
@@ -324,14 +344,14 @@ export default function VerClientes() {
           <DateCalendarValue setValue={setFecha} name="Mes y Año"></DateCalendarValue>
           <TablaFinanza data={pedidosMes}></TablaFinanza>
           <div>
-            <BarChart 
-            valores={valores} 
-            etiquetas={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]} 
-            nombre="AliExpress" 
-            valores2={valores2} 
-            nombre2="Stock" 
-            valores3={valores3} 
-            nombre3="Shein"></BarChart>
+            <BarChart
+              valores={valores}
+              etiquetas={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
+              nombre="AliExpress"
+              valores2={valores2}
+              nombre2="Stock"
+              valores3={valores3}
+              nombre3="Shein"></BarChart>
           </div>
           <div className={styles.grid3}>
             <div className={styles.valores}>Precios:  {precioTotal}</div>

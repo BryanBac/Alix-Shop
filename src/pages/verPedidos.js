@@ -38,6 +38,27 @@ export default function VerPedidos() {
 
     return () => unsubscribe();
   }, []);
+  // para los permisos
+  const [permisos, setPermisos] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('permisos');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    if (permisos.length > 0) {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        if (permisos.includes("Ver Pedido")) {
+
+        } else {
+          router.replace("/inicio")
+        }
+      }
+    }
+  }, [permisos])
 
   const filtrarPedidos = (valorBusqueda) => {
     return buscar.filter(pedido =>
@@ -223,9 +244,11 @@ export default function VerPedidos() {
               <div className={styles.square1}>Buscar</div>
               <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)}></textarea></div>
             </div>
-            <div className={styles.buttonC}>
-              <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
-            </div>
+            {permisos.includes("Crear Pedido") &&
+              <div className={styles.buttonC}>
+                <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
+              </div>
+            }
           </div>
           <div className={styles.checkboxContainer}>
             <label>

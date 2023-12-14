@@ -96,6 +96,27 @@ export default function CrearPedido() {
 
         return () => unsubscribe();
     }, []);
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
+
+    useEffect(() => {
+        if (permisos.length > 0) {
+            if (typeof window !== 'undefined' && window.sessionStorage) {
+                if (permisos.includes("Crear Pedido")) {
+
+                } else {
+                    router.replace("/inicio")
+                }
+            }
+        }
+    }, [permisos])
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||

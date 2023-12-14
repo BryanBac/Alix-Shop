@@ -21,6 +21,15 @@ export default function TablaClientes({ data, setActualizado }) {
     const [openPopUp, setOpenPopUp] = useState(false)
     const [openPopUp2, setOpenPopUp2] = useState(false)
     const [actualizar, setActualizar] = useState(false)
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
     const [id, setId] = useState("")
     const editar = (n, u, d, t, i) => {
         setNombre(n)
@@ -30,24 +39,24 @@ export default function TablaClientes({ data, setActualizado }) {
         setId(i)
         setOpenPopUp(true)
     }
-    const eliminar = (id)=>{
+    const eliminar = (id) => {
         setId(id)
         setOpenPopUp2(true)
     }
-    useEffect(()=>{
-        if(actualizar==true){
+    useEffect(() => {
+        if (actualizar == true) {
             setActualizado(true)
             setActualizar(false)
         }
-    },[actualizar])
+    }, [actualizar])
     return (
         <>
             <ModalPopUp
                 openPopUp={openPopUp}
                 setOpenPopUp={setOpenPopUp}
             >
-                <ModclientModal 
-                    nombre={nombre} setNombre={setNombre} 
+                <ModclientModal
+                    nombre={nombre} setNombre={setNombre}
                     username={username} setUserName={setUserName}
                     direccion={direccion} setDireccion={setDireccion}
                     telefono={telefono} setTelefono={setTelefono}
@@ -88,16 +97,20 @@ export default function TablaClientes({ data, setActualizado }) {
                                         Teléfono
                                     </div>
                                 </TableCell>
-                                <TableCell align="right">
-                                    <div className={styles.celdaRow}>
-                                        Editar
-                                    </div>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <div className={styles.celdaRow}>
-                                        Eliminar
-                                    </div>
-                                </TableCell>
+                                {permisos.includes("Editar Clientes") &&
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            Editar
+                                        </div>
+                                    </TableCell>
+                                }
+                                {permisos.includes("Eliminar Clientes") &&
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            Eliminar
+                                        </div>
+                                    </TableCell>
+                                }
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -123,12 +136,16 @@ export default function TablaClientes({ data, setActualizado }) {
                                             {row.telefono}
                                         </div>
                                     </TableCell>
-                                    <TableCell align="right">
-                                        <button onClick={() => editar(row.nombre, row.username, row.direccion, row.telefono, row.id)} className="boton-sin"><EditIcon></EditIcon></button>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <button onClick={() => eliminar(row.id)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
-                                    </TableCell>
+                                    {permisos.includes("Editar Clientes") &&
+                                        <TableCell align="right">
+                                            <button onClick={() => editar(row.nombre, row.username, row.direccion, row.telefono, row.id)} className="boton-sin"><EditIcon></EditIcon></button>
+                                        </TableCell>
+                                    }
+                                    {permisos.includes("Eliminar Clientes") &&
+                                        <TableCell align="right">
+                                            <button onClick={() => eliminar(row.id)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
+                                        </TableCell>
+                                    }
                                 </TableRow>
                             ))}
                         </TableBody>

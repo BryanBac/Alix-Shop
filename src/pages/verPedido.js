@@ -45,17 +45,17 @@ function obtenerFechaHoy() {
 export const calcularDiferenciaEntreFechas = (fecha1, fecha2) => {
     const [dia1, mes1, anio1] = fecha1.split('/').map(Number);
     const [dia2, mes2, anio2] = fecha2.split('/').map(Number);
-  
+
     const fecha1Obj = new Date(anio1, mes1 - 1, dia1); // Restar 1 al mes porque en JavaScript los meses van de 0 a 11
     const fecha2Obj = new Date(anio2, mes2 - 1, dia2);
-  
+
     // Calcular la diferencia en milisegundos y convertirla a días
     const diferenciaEnMilisegundos = fecha2Obj - fecha1Obj;
     const diasDiferencia = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
-  
+
     return diasDiferencia;
-  };
-  
+};
+
 
 export default function VerPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -134,7 +134,27 @@ export default function VerPedido() {
             return []
         }
     })
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
 
+    useEffect(() => {
+        if (permisos.length > 0) {
+            if (typeof window !== 'undefined' && window.sessionStorage) {
+                if (permisos.includes("Ver Pedido")) {
+
+                } else {
+                    router.replace("/inicio")
+                }
+            }
+        }
+    }, [permisos])
     function handleChange(e) {
         setFile(e.target.files[0]);
         setPreview(URL.createObjectURL(e.target.files[0]));
@@ -330,23 +350,23 @@ export default function VerPedido() {
         }
     }
 
-    useEffect(()=>{
-        if(fechaHoy!=""){
+    useEffect(() => {
+        if (fechaHoy != "") {
             let dH = obtenerFechaHoy();
             let dias = calcularDiferenciaEntreFechas(fechaHoy, dH);
             const root = document.documentElement;
-            if(dias<45){
+            if (dias < 45) {
                 root.style.setProperty('--estado', 'rgb(49, 245, 78)');
                 setDs("En camino")
-            }else if(dias>=45 && dias<60){
+            } else if (dias >= 45 && dias < 60) {
                 root.style.setProperty('--estado', 'rgb(245, 124, 49)');
                 setDs("Por llegar")
-            }else{
+            } else {
                 root.style.setProperty('--estado', 'rgb(245, 49, 49)');
                 setDs("Atrasado")
             }
         }
-    },[fechaHoy])
+    }, [fechaHoy])
 
     useEffect(() => {
         if (allData.length > 0 && clienteNombre != "") {
@@ -537,16 +557,21 @@ export default function VerPedido() {
                                     setOpenPopUp4(true)
                                 }}>Ver Pedidos Realizados</button>
                             </div>
-                            <label htmlFor="fileInput" className={styles.button5}>
-                                Agregar Guía
-                            </label>
-                            <input
-                                accept="image/png, image/jpeg"
-                                type="file"
-                                id="fileInput"
-                                onChange={handleChange}
-                                style={{ display: 'none' }} // Oculta el input real
-                            />
+                            {permisos.includes("Agregar Guia") &&
+                                <>
+                                    <label htmlFor="fileInput" className={styles.button5}>
+                                        Agregar Guía
+                                    </label>
+                                    <input
+                                        accept="image/png, image/jpeg"
+                                        type="file"
+                                        id="fileInput"
+                                        onChange={handleChange}
+                                        style={{ display: 'none' }} // Oculta el input real
+                                    />
+                                </>
+                            }
+
                         </div>
                         <div className={styles.productoContainer}>
                             <div className={styles.barraProducto}>
@@ -594,10 +619,12 @@ export default function VerPedido() {
                                 ></img>
                             </button>
                         </div>
-                        <div className={styles.inputC}>
-                            <div className={styles.square1}><div className={styles.flex}>Costo Total</div></div>
-                            <div className={styles.square2}>{costoT}</div>
-                        </div>
+                        {permisos.includes("Ver Finanzas") &&
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div className={styles.flex}>Costo Total</div></div>
+                                <div className={styles.square2}>{costoT}</div>
+                            </div>
+                        }
                         <div className={styles.inputC}>
                             <div className={styles.square1}><div className={styles.flex}>Precio Total</div></div>
                             <div className={styles.square2}>{total}</div>
@@ -607,16 +634,20 @@ export default function VerPedido() {
                                 <div className={styles.buttonC2}>
                                     <button className={styles.button2} onClick={() => router.push("verPedidos")}>Cancelar</button>
                                 </div>
-                                <div className={styles.buttonC2}>
-                                    <button className={styles.button3} onClick={() => {
-                                        modificarPedido();
-                                    }}>Guardar</button>
-                                </div>
-                                <div className={styles.buttonC2}>
-                                    <button className={styles.button4} onClick={() => {
-                                        setOpenPopUp5(true);
-                                    }}>Eliminar</button>
-                                </div>
+                                {permisos.includes("Editar Pedido") &&
+                                    <div className={styles.buttonC2}>
+                                        <button className={styles.button3} onClick={() => {
+                                            modificarPedido();
+                                        }}>Guardar</button>
+                                    </div>
+                                }
+                                {permisos.includes("Eliminar Pedido") &&
+                                    <div className={styles.buttonC2}>
+                                        <button className={styles.button4} onClick={() => {
+                                            setOpenPopUp5(true);
+                                        }}>Eliminar</button>
+                                    </div>
+                                }
                             </div>
                         </div>
                         {agregarCliente &&

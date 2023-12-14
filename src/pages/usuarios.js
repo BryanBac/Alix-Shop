@@ -29,6 +29,15 @@ export default function Configuracion() {
   const [openPopUp, setOpenPopUp] = useState(false)
   const [openPopUp2, setOpenPopUp2] = useState(false)
   const [selectedSources, setSelectedSources] = useState([]);
+  // para los permisos
+  const [permisos, setPermisos] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('permisos');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
   const router = useRouter();
   useEffect(() => {
     const unsubscribe = checkAuth((user) => {
@@ -40,6 +49,18 @@ export default function Configuracion() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (permisos.length > 0) {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        if (permisos.includes("Ver Usuarios")) {
+
+        } else {
+          router.replace("/inicio")
+        }
+      }
+    }
+  }, [permisos])
 
   const cambiarPedido = () => {
     modificarDocumento(process.env.NEXT_PUBLIC_CONTADOR_ID, "contadorPedido", {
@@ -87,7 +108,7 @@ export default function Configuracion() {
   }, [actualizar])
 
   useEffect(() => {
-    console.log(sessionStorage.getItem("permisos"))
+    console.log(permisos)
   }, [])
 
   return (
@@ -113,251 +134,257 @@ export default function Configuracion() {
       </ModalPopUp>
       <div className={styles.superContainer}>
         <div className={styles.container}>
-          <div>
-            <div className={styles.inputC}>
-              <div className={styles.square1}><div>Numero de Pedido</div></div>
-              <div className={styles.square2}>
-                <textarea type="text" className={styles.inp} onChange={(e) => setContador(e.target.value)} value={contador}>
-                </textarea>
-              </div>
-              <div className={styles.buttonC}>
-                <button className={styles.button} onClick={() => cambiarPedido()}>Cambiar Numero de Pedido</button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.gridUser}>
-            <div className={styles.inputC2}>
-              <div className={styles.square1}><div>Usuario</div></div>
-              <div className={styles.square2}>
-                <textarea type="text" className={styles.inp} onChange={(e) => setUsuario(e.target.value)} value={usuario}>
-                </textarea>
+          {permisos.includes("Cambiar Numero de Pedidos") &&
+            <div>
+              <div className={styles.inputC}>
+                <div className={styles.square1}><div>Numero de Pedido</div></div>
+                <div className={styles.square2}>
+                  <textarea type="text" className={styles.inp} onChange={(e) => setContador(e.target.value)} value={contador}>
+                  </textarea>
+                </div>
+                <div className={styles.buttonC}>
+                  <button className={styles.button} onClick={() => cambiarPedido()}>Cambiar Numero de Pedido</button>
+                </div>
               </div>
             </div>
-            <div className={styles.inputC2}>
-              <div className={styles.square1}><div>Correo</div></div>
-              <div className={styles.square2}>
-                <textarea type="text" className={styles.inp} onChange={(e) => setPassword(e.target.value)} value={password}>
-                </textarea>
+          }
+          {permisos.includes("Crear Usuarios") &&
+            <>
+              <div className={styles.gridUser}>
+                <div className={styles.inputC2}>
+                  <div className={styles.square1}><div>Usuario</div></div>
+                  <div className={styles.square2}>
+                    <textarea type="text" className={styles.inp} onChange={(e) => setUsuario(e.target.value)} value={usuario}>
+                    </textarea>
+                  </div>
+                </div>
+                <div className={styles.inputC2}>
+                  <div className={styles.square1}><div>Correo</div></div>
+                  <div className={styles.square2}>
+                    <textarea type="text" className={styles.inp} onChange={(e) => setPassword(e.target.value)} value={password}>
+                    </textarea>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className={styles.permisosContainer}>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Ver Clientes')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Ver Clientes')
-                      ? prev.filter((source) => source !== 'Ver Clientes')
-                      : [...prev, 'Ver Clientes']
-                  );
-                }}
-              />
-              Ver Clientes
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Crear Clientes')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Crear Clientes')
-                      ? prev.filter((source) => source !== 'Crear Clientes')
-                      : [...prev, 'Crear Clientes']
-                  );
-                }}
-              />
-              Crear Clientes
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Editar Clientes')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Editar Clientes')
-                      ? prev.filter((source) => source !== 'Editar Clientes')
-                      : [...prev, 'Editar Clientes']
-                  );
-                }}
-              />
-              Editar Clientes
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Eliminar Clientes')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Eliminar Clientes')
-                      ? prev.filter((source) => source !== 'Eliminar Clientes')
-                      : [...prev, 'Eliminar Clientes']
-                  );
-                }}
-              />
-              Eliminar Clientes
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Ver Pedido')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Ver Pedido')
-                      ? prev.filter((source) => source !== 'Ver Pedido')
-                      : [...prev, 'Ver Pedido']
-                  );
-                }}
-              />
-              Ver Pedido
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Crear Pedido')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Crear Pedido')
-                      ? prev.filter((source) => source !== 'Crear Pedido')
-                      : [...prev, 'Crear Pedido']
-                  );
-                }}
-              />
-              Crear Pedido
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Editar Pedido')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Editar Pedido')
-                      ? prev.filter((source) => source !== 'Editar Pedido')
-                      : [...prev, 'Editar Pedido']
-                  );
-                }}
-              />
-              Editar Pedido
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Eliminar Pedido')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Eliminar Pedido')
-                      ? prev.filter((source) => source !== 'Eliminar Pedido')
-                      : [...prev, 'Eliminar Pedido']
-                  );
-                }}
-              />
-              Eliminar Pedido
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Ver Usuarios')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Ver Usuarios')
-                      ? prev.filter((source) => source !== 'Ver Usuarios')
-                      : [...prev, 'Ver Usuarios']
-                  );
-                }}
-              />
-              Ver Usuarios
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Crear Usuarios')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Crear Usuarios')
-                      ? prev.filter((source) => source !== 'Crear Usuarios')
-                      : [...prev, 'Crear Usuarios']
-                  );
-                }}
-              />
-              Crear Usuarios
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Editar Usuarios')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Editar Usuarios')
-                      ? prev.filter((source) => source !== 'Editar Usuarios')
-                      : [...prev, 'Editar Usuarios']
-                  );
-                }}
-              />
-              Editar Usuarios
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Eliminar Usuarios')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Eliminar Usuarios')
-                      ? prev.filter((source) => source !== 'Eliminar Usuarios')
-                      : [...prev, 'Eliminar Usuarios']
-                  );
-                }}
-              />
-              Eliminar Usuarios
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Agregar Guia')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Agregar Guia')
-                      ? prev.filter((source) => source !== 'Agregar Guia')
-                      : [...prev, 'Agregar Guia']
-                  );
-                }}
-              />
-              Agregar Guia
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Ver Finanzas')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Ver Finanzas')
-                      ? prev.filter((source) => source !== 'Ver Finanzas')
-                      : [...prev, 'Ver Finanzas']
-                  );
-                }}
-              />
-              Ver Finanzas
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedSources.includes('Cambiar Numero de Pedidos')}
-                onChange={() => {
-                  setSelectedSources((prev) =>
-                    prev.includes('Cambiar Numero de Pedidos')
-                      ? prev.filter((source) => source !== 'Cambiar Numero de Pedidos')
-                      : [...prev, 'Cambiar Numero de Pedidos']
-                  );
-                }}
-              />
-              Cambiar Numero de Pedidos
-            </label>
-          </div>
-          <div className={styles.containerButton}>
-            <div className={styles.buttonC}>
-              <button className={styles.button} onClick={() => crearUsuario()}>Crear usuario</button>
-            </div>
-          </div>
+              <div className={styles.permisosContainer}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Ver Clientes')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Ver Clientes')
+                          ? prev.filter((source) => source !== 'Ver Clientes')
+                          : [...prev, 'Ver Clientes']
+                      );
+                    }}
+                  />
+                  Ver Clientes
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Crear Clientes')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Crear Clientes')
+                          ? prev.filter((source) => source !== 'Crear Clientes')
+                          : [...prev, 'Crear Clientes']
+                      );
+                    }}
+                  />
+                  Crear Clientes
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Editar Clientes')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Editar Clientes')
+                          ? prev.filter((source) => source !== 'Editar Clientes')
+                          : [...prev, 'Editar Clientes']
+                      );
+                    }}
+                  />
+                  Editar Clientes
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Eliminar Clientes')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Eliminar Clientes')
+                          ? prev.filter((source) => source !== 'Eliminar Clientes')
+                          : [...prev, 'Eliminar Clientes']
+                      );
+                    }}
+                  />
+                  Eliminar Clientes
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Ver Pedido')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Ver Pedido')
+                          ? prev.filter((source) => source !== 'Ver Pedido')
+                          : [...prev, 'Ver Pedido']
+                      );
+                    }}
+                  />
+                  Ver Pedido
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Crear Pedido')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Crear Pedido')
+                          ? prev.filter((source) => source !== 'Crear Pedido')
+                          : [...prev, 'Crear Pedido']
+                      );
+                    }}
+                  />
+                  Crear Pedido
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Editar Pedido')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Editar Pedido')
+                          ? prev.filter((source) => source !== 'Editar Pedido')
+                          : [...prev, 'Editar Pedido']
+                      );
+                    }}
+                  />
+                  Editar Pedido
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Eliminar Pedido')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Eliminar Pedido')
+                          ? prev.filter((source) => source !== 'Eliminar Pedido')
+                          : [...prev, 'Eliminar Pedido']
+                      );
+                    }}
+                  />
+                  Eliminar Pedido
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Ver Usuarios')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Ver Usuarios')
+                          ? prev.filter((source) => source !== 'Ver Usuarios')
+                          : [...prev, 'Ver Usuarios']
+                      );
+                    }}
+                  />
+                  Ver Usuarios
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Crear Usuarios')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Crear Usuarios')
+                          ? prev.filter((source) => source !== 'Crear Usuarios')
+                          : [...prev, 'Crear Usuarios']
+                      );
+                    }}
+                  />
+                  Crear Usuarios
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Editar Usuarios')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Editar Usuarios')
+                          ? prev.filter((source) => source !== 'Editar Usuarios')
+                          : [...prev, 'Editar Usuarios']
+                      );
+                    }}
+                  />
+                  Editar Usuarios
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Eliminar Usuarios')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Eliminar Usuarios')
+                          ? prev.filter((source) => source !== 'Eliminar Usuarios')
+                          : [...prev, 'Eliminar Usuarios']
+                      );
+                    }}
+                  />
+                  Eliminar Usuarios
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Agregar Guia')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Agregar Guia')
+                          ? prev.filter((source) => source !== 'Agregar Guia')
+                          : [...prev, 'Agregar Guia']
+                      );
+                    }}
+                  />
+                  Agregar Guia
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Ver Finanzas')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Ver Finanzas')
+                          ? prev.filter((source) => source !== 'Ver Finanzas')
+                          : [...prev, 'Ver Finanzas']
+                      );
+                    }}
+                  />
+                  Ver Finanzas
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes('Cambiar Numero de Pedidos')}
+                    onChange={() => {
+                      setSelectedSources((prev) =>
+                        prev.includes('Cambiar Numero de Pedidos')
+                          ? prev.filter((source) => source !== 'Cambiar Numero de Pedidos')
+                          : [...prev, 'Cambiar Numero de Pedidos']
+                      );
+                    }}
+                  />
+                  Cambiar Numero de Pedidos
+                </label>
+              </div>
+              <div className={styles.containerButton}>
+                <div className={styles.buttonC}>
+                  <button className={styles.button} onClick={() => crearUsuario()}>Crear usuario</button>
+                </div>
+              </div>
+            </>
+          }
           <div className={styles.containerButton}>
             <TablaUsuarios data={usuarios} setActualizado={setActualizar}></TablaUsuarios>
           </div>

@@ -10,6 +10,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 
 export default function TablaProductos({ data, setData }) {
+    
+    // para los permisos
+    const [permisos, setPermisos] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('permisos');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
     const handleInputChange = (e, rowIndex, key) => {
         const updatedData = data.map((product, index) => {
             if (index === rowIndex) {
@@ -36,11 +46,13 @@ export default function TablaProductos({ data, setData }) {
                                         Producto
                                     </div>
                                 </TableCell>
-                                <TableCell align="right">
-                                    <div className={styles.celdaRow}>
-                                        Costo
-                                    </div>
-                                </TableCell>
+                                {permisos.includes("Ver Finanzas") &&
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            Costo
+                                        </div>
+                                    </TableCell>
+                                }
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
                                         Precio
@@ -71,42 +83,44 @@ export default function TablaProductos({ data, setData }) {
                             {data.map((row, rowIndex) => (
                                 <TableRow key={row.id}>
                                     <TableCell align="right">
-                                        <textarea value={row.producto} className={styles.celdaRow} onChange={(e)=>{
-                                           handleInputChange(e, rowIndex, 'producto')
+                                        <textarea value={row.producto} className={styles.celdaRow} onChange={(e) => {
+                                            handleInputChange(e, rowIndex, 'producto')
                                         }}></textarea>
                                     </TableCell>
+                                    {permisos.includes("Ver Finanzas") &&
+                                        <TableCell align="right">
+                                            <textarea value={row.costo} className={styles.celdaRow} onChange={(e) => {
+                                                handleInputChange(e, rowIndex, 'costo')
+                                            }}>
+                                            </textarea>
+                                        </TableCell>
+                                    }
                                     <TableCell align="right">
-                                        <textarea value={row.costo} className={styles.celdaRow} onChange={(e)=>{
-                                            handleInputChange(e, rowIndex, 'costo')
-                                        }}>
-                                        </textarea>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <textarea value={row.precio} className={styles.celdaRow} onChange={(e)=>{
+                                        <textarea value={row.precio} className={styles.celdaRow} onChange={(e) => {
                                             handleInputChange(e, rowIndex, 'precio')
                                         }}>
                                         </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <textarea value={row.codeAli} className={styles.celdaRow} onChange={(e)=>{
+                                        <textarea value={row.codeAli} className={styles.celdaRow} onChange={(e) => {
                                             handleInputChange(e, rowIndex, 'codeAli')
                                         }}>
                                         </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <textarea value={row.codeMail} className={styles.celdaRow} onChange={(e)=>{
+                                        <textarea value={row.codeMail} className={styles.celdaRow} onChange={(e) => {
                                             handleInputChange(e, rowIndex, 'codeMail')
                                         }}>
                                         </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <textarea value={row.codeRastreo} className={styles.celdaRow} onChange={(e)=>{
+                                        <textarea value={row.codeRastreo} className={styles.celdaRow} onChange={(e) => {
                                             handleInputChange(e, rowIndex, 'codeRastreo')
                                         }}>
                                         </textarea>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <button onClick={()=>eliminarFila(rowIndex)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
+                                        <button onClick={() => eliminarFila(rowIndex)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
                                     </TableCell>
                                 </TableRow>
                             ))}

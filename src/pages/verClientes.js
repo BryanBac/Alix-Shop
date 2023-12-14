@@ -11,9 +11,9 @@ import { authG } from "../../firebase";
 import { useRouter } from "next/router";
 
 const checkAuth = (callback) => {
-    return onAuthStateChanged(authG, (user) => {
-      callback(user);
-    });
+  return onAuthStateChanged(authG, (user) => {
+    callback(user);
+  });
 };
 
 
@@ -24,6 +24,15 @@ export default function VerClientes() {
   const [agregado, setAgregado] = useState(false)
   const [actualizar, setActualizar] = useState(false)
   const [openPopUp, setOpenPopUp] = useState(false)
+  // para los permisos
+  const [permisos, setPermisos] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('permisos');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
   const router = useRouter();
   useEffect(() => {
     const unsubscribe = checkAuth((user) => {
@@ -35,10 +44,21 @@ export default function VerClientes() {
 
     return () => unsubscribe();
   }, []);
+  useEffect(() => {
+    if (permisos.length > 0) {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        if (permisos.includes("Ver Clientes")) {
+
+        } else {
+          router.replace("/inicio")
+        }
+      }
+    }
+  }, [permisos])
   const filtrarClientes = (valorBusqueda) => {
     return clientes.filter(cliente =>
       cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
-      cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
+      cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
   };
 
@@ -62,9 +82,9 @@ export default function VerClientes() {
   useEffect(() => {
     fetchData()
   }, [agregado])
-  
+
   useEffect(() => {
-    if(actualizar){
+    if (actualizar) {
       fetchData()
       setActualizar(false)
     }
@@ -92,9 +112,11 @@ export default function VerClientes() {
               <div className={styles.square1}>Buscar</div>
               <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda(e)}></textarea></div>
             </div>
-            <div className={styles.buttonC}>
-              <button className={styles.button} onClick={(e) => setOpenPopUp(true)}>Agregar Cliente</button>
-            </div>
+            {permisos.includes("Crear Clientes") &&
+              <div className={styles.buttonC}>
+                <button className={styles.button} onClick={(e) => setOpenPopUp(true)}>Agregar Cliente</button>
+              </div>
+            }
           </div>
           <TablaClientes data={buscar} setActualizado={setActualizar}></TablaClientes>
         </div>
