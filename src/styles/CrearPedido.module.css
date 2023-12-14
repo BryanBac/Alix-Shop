@@ -177,3 +177,6 @@
     height: 250px;
   }
   
+  .estado{
+    background-color: var(--estado);
+  }

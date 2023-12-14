@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import Head from 'next/head'
 import styles from '@/styles/CrearPedido.module.css'
 import obtenerPorId from "./api/firebase/get-data-one";
-import Dropdown from "@/components/dropdown";
 import DateCalendarValue from "@/components/datePicker";
 import TablaProductos from "@/components/tablaProducto";
 import CreatePedidoModal from "@/components/popup/modalCreatePedido";
@@ -41,6 +40,22 @@ function obtenerFechaHoy() {
 
     return fechaFormateada;
 }
+
+// utils/fecha.js
+export const calcularDiferenciaEntreFechas = (fecha1, fecha2) => {
+    const [dia1, mes1, anio1] = fecha1.split('/').map(Number);
+    const [dia2, mes2, anio2] = fecha2.split('/').map(Number);
+  
+    const fecha1Obj = new Date(anio1, mes1 - 1, dia1); // Restar 1 al mes porque en JavaScript los meses van de 0 a 11
+    const fecha2Obj = new Date(anio2, mes2 - 1, dia2);
+  
+    // Calcular la diferencia en milisegundos y convertirla a días
+    const diferenciaEnMilisegundos = fecha2Obj - fecha1Obj;
+    const diasDiferencia = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
+  
+    return diasDiferencia;
+  };
+  
 
 export default function VerPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -82,6 +97,7 @@ export default function VerPedido() {
     const [fechaHoy, setFechaHoy] = useState("")
     const [fechaFinal, setFechaFinal] = useState("")
     const [fechaAprox, setFechaAprox] = useState("")
+    const [ds, setDs] = useState("")
     // numericos
     const [anticipo, setAnticipo] = useState()
     const [costoT, setCostoT] = useState(0)
@@ -314,6 +330,24 @@ export default function VerPedido() {
         }
     }
 
+    useEffect(()=>{
+        if(fechaHoy!=""){
+            let dH = obtenerFechaHoy();
+            let dias = calcularDiferenciaEntreFechas(fechaHoy, dH);
+            const root = document.documentElement;
+            if(dias<45){
+                root.style.setProperty('--estado', 'rgb(49, 245, 78)');
+                setDs("En camino")
+            }else if(dias>=45 && dias<60){
+                root.style.setProperty('--estado', 'rgb(245, 124, 49)');
+                setDs("Por llegar")
+            }else{
+                root.style.setProperty('--estado', 'rgb(245, 49, 49)');
+                setDs("Atrasado")
+            }
+        }
+    },[fechaHoy])
+
     useEffect(() => {
         if (allData.length > 0 && clienteNombre != "") {
             const documentosFiltrados = allData.filter(documento =>
@@ -482,7 +516,7 @@ export default function VerPedido() {
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}>Estado</div>
-                                <Dropdown options={["Pedido", "Recibido", "Enviado", "Entregado"]} onSelect={setEstado}></Dropdown>
+                                <div className={`${styles.square2} ${styles.estado}`}>{ds}</div>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Anticipo</div></div>
