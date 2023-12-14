@@ -83,3 +83,9 @@
     background-color: rgb(194, 156, 200);
     border-color: rgb(194, 156, 200);
 }
+.permisosContainer{
+    display: grid;
+    margin-top: 20px;
+    grid-template-columns: 25% 25% 25% 25%;
+    column-gap: 3%;
+}

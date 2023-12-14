@@ -27,8 +27,8 @@ export default function DropdownRoute({ options, isDarkMode }) {
             router.push("crearPedido");
         }else if(option=="Finanzas"){
             router.push("finanza");
-        }else if(option=="Configurción"){
-            router.push("configuracion");
+        }else if(option=="Usuarios y Permisos"){
+            router.push("usuarios");
         }else if(option=="Cerrar Sesión"){
             handleLogout();
         }else{
