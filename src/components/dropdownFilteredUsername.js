@@ -2,7 +2,7 @@ import styles from '@/styles/Dropdown.module.css'
 import obtener from '@/pages/api/firebase/get-data';
 import { useState, useEffect } from "react";
 
-export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNombre,setClienteTelefono, setClienteDirección,username, setUsername }) {
+export default function DropdownFilteredUsername({ onSelect, setClienteNombre, clienteNombre,setClienteTelefono, setClienteDirección,username, setUsername }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [clientes, setClientes] = useState([])
     const [buscar, setBuscar] = useState([])
@@ -13,10 +13,9 @@ export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNo
             cliente.username.toLowerCase().includes(valorBusqueda.toLowerCase()) 
         );
     };
-
     useEffect(()=>{
-        setNombre(clienteNombre)
-    },[clienteNombre])
+        setNombre(username)
+    },[username])
 
     const fetchData = async () => {
         try {
@@ -59,7 +58,7 @@ export default function DropdownFiltered({ onSelect, setClienteNombre, clienteNo
             <ul className={styles.dropdownList}>
                 {buscar.map((option) => (
                     <li key={option.id} onClick={() => handleSelect(option)}>
-                        {option.nombre}
+                        {option.username}
                     </li>
                 ))}
             </ul>

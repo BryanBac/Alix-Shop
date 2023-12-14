@@ -29,7 +29,6 @@ export default function Home() {
           sessionStorage.setItem("usuario", usuario);
           sessionStorage.setItem("pagina", "noLogin")
           sessionStorage.setItem("modo", "false");
-          console.log("Si")
           router.push("inicio")
         } else {
           setParaVer("3")
@@ -53,7 +52,6 @@ export default function Home() {
       sessionStorage.setItem("usuario", usuario);
       sessionStorage.setItem("pagina", "noLogin")
       sessionStorage.setItem("modo", "false");
-      console.log("Si")
       router.push("inicio")
     }
   }, [paso])

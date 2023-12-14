@@ -4,7 +4,6 @@ import eliminarDocumento from '@/pages/api/firebase/delete-data';
 
 export default function EliminarActualizar(props) {
     const { setOpenPopUp, id, coleccion, ruta, actualizar, setActualizar } = props
-    console.log(id)
     const router = useRouter()
     return (<>
         <div>

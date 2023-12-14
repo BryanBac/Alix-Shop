@@ -17,10 +17,8 @@ import ModalPedido from "@/components/popup/modalPedidoTabla";
 import { storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import TablaUsuario from "@/components/tablaPedidosUsuario";
 import modificarDocumento from "./api/firebase/update-data";
 import EliminarPedido from "@/components/popup/modalEliminarPedido";
-import TablaPedidosUsuario from "@/components/tablaPedidosUsuario";
 import { onAuthStateChanged } from 'firebase/auth';
 import { authG } from "../../firebase";
 
@@ -74,6 +72,7 @@ export default function VerPedido() {
     const [clienteNombre, setClienteNombre] = useState("") // aquí va el nombre del cliente
     const [clienteTelefono, setClienteTelefono] = useState("")
     const [clienteDirección, setClienteDirección] = useState("")
+    const [clienteUsername, setClienteUsername] = useState("")
     const [clienteObt, setClienteObt] = useState()
     // codigos
     const [codeAli, setCodeAli] = useState("")
@@ -157,6 +156,7 @@ export default function VerPedido() {
         setAnticipo("")
         setEstado("")
         setFechaFinal("")
+        setClienteUsername("")
         setCostoT(0)
         setTotal(0)
         setProductos([])
@@ -199,6 +199,7 @@ export default function VerPedido() {
                             telefono: clienteTelefono,
                             direccion: clienteDirección,
                             contador: contador,
+                            username: clienteUsername
                         }
                         modificarDocumento(idPedido, aliShein, pedido)
                         vaciar()
@@ -227,6 +228,7 @@ export default function VerPedido() {
                     telefono: clienteTelefono,
                     direccion: clienteDirección,
                     contador: contador,
+                    username: clienteUsername
                 }
                 modificarDocumento(idPedido, aliShein, pedido)
                 vaciar()
@@ -273,6 +275,7 @@ export default function VerPedido() {
                             telefono: clienteTelefono,
                             direccion: clienteDirección,
                             contador: contador,
+                            username: clienteUsername
                         }
                         modificarDocumento(idPedido, aliShein, pedido)
                         vaciar()
@@ -301,6 +304,7 @@ export default function VerPedido() {
                     telefono: clienteTelefono,
                     direccion: clienteDirección,
                     contador: contador,
+                    username: clienteUsername
                 }
                 modificarDocumento(idPedido, aliShein, pedido)
                 vaciar()
@@ -343,7 +347,6 @@ export default function VerPedido() {
     }, [idPedido, origenPedido])
 
     useEffect(() => {
-        console.log("ClienteID", clienteDrop)
         if (clienteDrop != "") {
             obtenerPorId("clientes", clienteDrop).then((item) => setClienteObt(item))
         }
@@ -358,6 +361,7 @@ export default function VerPedido() {
             setFechaHoy(pedidoObtenido.fechaPedido)
             setFechaAprox(pedidoObtenido.fechaAprox)
             setEstado(pedidoObtenido.estado)
+            setClienteUsername(pedidoObtenido.username)
             if (pedidoObtenido.imagen != "") {
                 setPreview(pedidoObtenido.imagen)
             }
@@ -452,6 +456,12 @@ export default function VerPedido() {
                                 <div className={styles.square1}><div>Cliente</div></div>
                                 <div className={styles.square2}>
                                     {clienteNombre}
+                                </div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Username</div></div>
+                                <div className={styles.square2}>
+                                    {clienteUsername}
                                 </div>
                             </div>
                             <div className={styles.inputC}>

@@ -7,6 +7,7 @@ import enviar from "./api/firebase/post-data";
 import Dropdown from "@/components/dropdown";
 import DateCalendarValue from "@/components/datePicker";
 import DropdownFiltered from "@/components/dropdownFiltered";
+import DropdownFilteredUsername from "@/components/dropdownFilteredUsername";
 import TablaProductos from "@/components/tablaProducto";
 import CreatePedidoModal from "@/components/popup/modalCreatePedido";
 import CreatePedidoModal2 from "@/components/popup/modalCreatePedido2";
@@ -20,7 +21,7 @@ import { authG } from "../../firebase";
 
 const checkAuth = (callback) => {
     return onAuthStateChanged(authG, (user) => {
-      callback(user);
+        callback(user);
     });
 };
 
@@ -57,6 +58,7 @@ export default function CrearPedido() {
     const [clienteDrop, setClienteDrop] = useState("") // aquí va el id del cliente seleccionado
     const [clienteNombre, setClienteNombre] = useState("") // aquí va el nombre del cliente
     const [clienteTelefono, setClienteTelefono] = useState("")
+    const [clienteUsername, setClienteUsername] = useState("")
     const [clienteDirección, setClienteDirección] = useState("")
     // codigos
     const [codeAli, setCodeAli] = useState("")
@@ -86,14 +88,14 @@ export default function CrearPedido() {
     // comienzan las funciones
     useEffect(() => {
         const unsubscribe = checkAuth((user) => {
-          if (!user) {
-            // Redirect to the login page if the user is not logged in
-            router.replace('/');
-          }
+            if (!user) {
+                // Redirect to the login page if the user is not logged in
+                router.replace('/');
+            }
         });
-    
+
         return () => unsubscribe();
-      }, []);
+    }, []);
     const filtrarPedidos = (valorBusqueda) => {
         return clientes.filter(cliente =>
             cliente.nombre.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
@@ -157,13 +159,13 @@ export default function CrearPedido() {
         setEstado("")
         setFechaFinal("")
         setRecibe("")
+        setClienteUsername("")
         setEnvio()
         setCostoT(0)
         setTotal(0)
         setProductos([])
     }
     const crearPedido = () => {
-        console.log(aliShein)
         if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
             setOpenPopUp3(true)
         } else {
@@ -193,7 +195,8 @@ export default function CrearPedido() {
                 envio: envio,
                 telefono: clienteTelefono,
                 direccion: clienteDirección,
-                imagen: ""
+                imagen: "",
+                username: clienteUsername
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
@@ -233,7 +236,8 @@ export default function CrearPedido() {
                 envio: envio,
                 telefono: clienteTelefono,
                 direccion: clienteDirección,
-                imagen: ""
+                imagen: "",
+                username: clienteUsername
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
@@ -258,11 +262,11 @@ export default function CrearPedido() {
         fetchData()
         fetchContador()
     }, [])
-    useEffect(()=>{
-        if(contador.length>0){
-            setValorContador(contador[0].contador+1)
+    useEffect(() => {
+        if (contador.length > 0) {
+            setValorContador(contador[0].contador + 1)
         }
-    },[contador])
+    }, [contador])
 
     useEffect(() => {
         if (estado == "Entregado") {
@@ -272,11 +276,11 @@ export default function CrearPedido() {
         }
     }, [estado])
 
-    useEffect(()=>{
-        if(productos.length>0){
+    useEffect(() => {
+        if (productos.length > 0) {
             let prT = 0
             let costT = 0
-            for (let i = 0; i<productos.length; i++){
+            for (let i = 0; i < productos.length; i++) {
                 prT += Number(productos[i].precio)
                 costT += Number(productos[i].costo)
             }
@@ -323,6 +327,23 @@ export default function CrearPedido() {
                                 <div className={styles.square1}><div>Cliente</div></div>
                                 <div className={styles.square2}>
                                     <DropdownFiltered
+                                        setUsername={setClienteUsername}
+                                        username={clienteUsername}
+                                        setClienteNombre={setClienteNombre}
+                                        clienteNombre={clienteNombre}
+                                        setClienteTelefono={setClienteTelefono}
+                                        setClienteDirección={setClienteDirección}
+                                        onSelect={setClienteDrop}
+                                    />
+                                </div>
+                                <div><button onClick={() => setAgregarCliente(!agregarCliente)}>+</button></div>
+                            </div>
+                            <div className={styles.inputC3}>
+                                <div className={styles.square1}><div>Username</div></div>
+                                <div className={styles.square2}>
+                                    <DropdownFilteredUsername
+                                        setUsername={setClienteUsername}
+                                        username={clienteUsername}
                                         setClienteNombre={setClienteNombre}
                                         clienteNombre={clienteNombre}
                                         setClienteTelefono={setClienteTelefono}

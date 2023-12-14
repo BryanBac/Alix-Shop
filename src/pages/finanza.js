@@ -8,11 +8,12 @@ import styles from '@/styles/Finanza.module.css'
 import { onAuthStateChanged } from 'firebase/auth';
 import { authG } from "../../firebase";
 import { useRouter } from "next/router";
+import BarChart from "@/components/chart/barChar";
 
 const checkAuth = (callback) => {
-    return onAuthStateChanged(authG, (user) => {
-      callback(user);
-    });
+  return onAuthStateChanged(authG, (user) => {
+    callback(user);
+  });
 };
 
 
@@ -21,6 +22,10 @@ export default function VerClientes() {
   const [aliexpress, setAliexpress] = useState([])
   const [shein, setShein] = useState([])
   const [stock, setStock] = useState([])
+  // para las graficas
+  const [valores, setValores] = useState([])
+  const [valores2, setValores2] = useState([])
+  const [valores3, setValores3] = useState([])
   // creo que para datos
   const [precioTotal, setPrecioTotal] = useState(0)
   const [costoTotal, setCostoTotal] = useState(0)
@@ -135,8 +140,6 @@ export default function VerClientes() {
 
   useEffect(() => {
     if (allData.length > 0) {
-      console.log("Mes: ", typeof mes, mes, "Año: ", typeof año, año)
-      console.log("Info", allData)
       setPedidosMes(obtenerListaFiltrada(allData, mes, año))
     }
   }, [allData, mes, año])
@@ -149,9 +152,9 @@ export default function VerClientes() {
       for (let i = 0; i < pedidosMes.length; i++) {
         t += pedidosMes[i].precioTotal;
         c += pedidosMes[i].costoTotal;
-        if(typeof pedidosMes[i].anticipo == "string"){
+        if (typeof pedidosMes[i].anticipo == "string") {
           anti += Number(pedidosMes[i].anticipo)
-        }else{
+        } else {
           anti += pedidosMes[i].anticipo
         }
       }
@@ -159,8 +162,8 @@ export default function VerClientes() {
       setCostoTotal(c)
       setAnticipos(anti)
       setGanancia(t - c)
-      setGReal(anti-c)
-    }else{
+      setGReal(anti - c)
+    } else {
       setPrecioTotal(0)
       setCostoTotal(0)
       setAnticipos(0)
@@ -168,6 +171,144 @@ export default function VerClientes() {
       setGReal(0)
     }
   }, [pedidosMes, fecha])
+
+  useEffect(() => {
+    if (aliexpress.length >= 0) {
+      let enero = 0;
+      let febrero = 0;
+      let marzo = 0;
+      let abri = 0;
+      let mayo = 0;
+      let junio = 0;
+      let julio = 0;
+      let agosto = 0;
+      let sept = 0;
+      let oct = 0;
+      let nov = 0;
+      let dic = 0;
+      const listaFiltrada = aliexpress.filter((item) => {
+        // Suponemos que el formato de fechaPedido es dd/mm/yyyy
+        const [d, m, a] = item.fechaPedido.split('/');
+        if (m == "1") {
+          enero += 1;
+        } else if (m == "2") {
+          febrero += 1;
+        } else if (m == "3") {
+          marzo += 1;
+        } else if (m == "4") {
+          abri += 1;
+        } else if (m == "5") {
+          mayo += 1;
+        } else if (m == "6") {
+          junio += 1;
+        } else if (m == "7") {
+          julio += 1;
+        } else if (m == "8") {
+          agosto += 1;
+        } else if (m == "9") {
+          sept += 1;
+        } else if (m == "10") {
+          oct += 1;
+        } else if (m == "11") {
+          nov += 1;
+        } else if (m == "12") {
+          dic += 1;
+        }
+      });
+      let va = [enero, febrero, marzo, abri, mayo, junio, julio, agosto, sept, oct, nov, dic]
+      setValores(va)
+    }
+    if (stock.length >= 0) {
+      let enero = 0;
+      let febrero = 0;
+      let marzo = 0;
+      let abri = 0;
+      let mayo = 0;
+      let junio = 0;
+      let julio = 0;
+      let agosto = 0;
+      let sept = 0;
+      let oct = 0;
+      let nov = 0;
+      let dic = 0;
+      const listaFiltrada = stock.filter((item) => {
+        // Suponemos que el formato de fechaPedido es dd/mm/yyyy
+        const [d, m, a] = item.fechaPedido.split('/');
+        if (m == "1") {
+          enero += 1;
+        } else if (m == "2") {
+          febrero += 1;
+        } else if (m == "3") {
+          marzo += 1;
+        } else if (m == "4") {
+          abri += 1;
+        } else if (m == "5") {
+          mayo += 1;
+        } else if (m == "6") {
+          junio += 1;
+        } else if (m == "7") {
+          julio += 1;
+        } else if (m == "8") {
+          agosto += 1;
+        } else if (m == "9") {
+          sept += 1;
+        } else if (m == "10") {
+          oct += 1;
+        } else if (m == "11") {
+          nov += 1;
+        } else if (m == "12") {
+          dic += 1;
+        }
+      });
+      let va = [enero, febrero, marzo, abri, mayo, junio, julio, agosto, sept, oct, nov, dic]
+      setValores2(va)
+    }
+    if (shein.length >= 0) {
+      let enero = 0;
+      let febrero = 0;
+      let marzo = 0;
+      let abri = 0;
+      let mayo = 0;
+      let junio = 0;
+      let julio = 0;
+      let agosto = 0;
+      let sept = 0;
+      let oct = 0;
+      let nov = 0;
+      let dic = 0;
+      const listaFiltrada = shein.filter((item) => {
+        // Suponemos que el formato de fechaPedido es dd/mm/yyyy
+        const [d, m, a] = item.fechaPedido.split('/');
+        if (m == "1") {
+          enero += 1;
+        } else if (m == "2") {
+          febrero += 1;
+        } else if (m == "3") {
+          marzo += 1;
+        } else if (m == "4") {
+          abri += 1;
+        } else if (m == "5") {
+          mayo += 1;
+        } else if (m == "6") {
+          junio += 1;
+        } else if (m == "7") {
+          julio += 1;
+        } else if (m == "8") {
+          agosto += 1;
+        } else if (m == "9") {
+          sept += 1;
+        } else if (m == "10") {
+          oct += 1;
+        } else if (m == "11") {
+          nov += 1;
+        } else if (m == "12") {
+          dic += 1;
+        }
+      });
+      let va = [enero, febrero, marzo, abri, mayo, junio, julio, agosto, sept, oct, nov, dic]
+      setValores3(va)
+    }
+  }, [aliexpress, stock, shein])
 
   return (
     <>
@@ -182,12 +323,22 @@ export default function VerClientes() {
         <div className={styles.container}>
           <DateCalendarValue setValue={setFecha} name="Mes y Año"></DateCalendarValue>
           <TablaFinanza data={pedidosMes}></TablaFinanza>
+          <div>
+            <BarChart 
+            valores={valores} 
+            etiquetas={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]} 
+            nombre="AliExpress" 
+            valores2={valores2} 
+            nombre2="Stock" 
+            valores3={valores3} 
+            nombre3="Shein"></BarChart>
+          </div>
           <div className={styles.grid3}>
             <div className={styles.valores}>Precios:  {precioTotal}</div>
-            <div className={styles.valores}>Costos:  {costoTotal}</div>
             <div className={styles.valores}>Anticipos:  {anticipos}</div>
-            <div className={styles.valores}>Ganancia Esperada:  {ganancia}</div>
+            <div className={styles.valores}>Costos:  {costoTotal}</div>
             <div className={styles.valores}>Ganancia Real:  {gReal}</div>
+            <div className={styles.valores}>Ganancia Esperada:  {ganancia}</div>
           </div>
         </div>
       </div>

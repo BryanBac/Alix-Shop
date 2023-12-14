@@ -1,0 +1,10 @@
+.grid{
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    column-gap: 5px;
+    width: 100%;
+}
+.grafica{
+    width: 100%;
+    height: auto;
+}

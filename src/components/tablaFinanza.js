@@ -10,7 +10,6 @@ import styles from '@/styles/Tabla.module.css'
 export default function TablaFinanza({ data }) {
     // esta es la que me sirve para ver lo de todos los pedidos del mes
     const calcularColor = (diferencia) => {
-        console.log(typeof diferencia, diferencia)
         return diferencia > 0 ? 'ganancia' : diferencia < 0 ? 'perdida' : 'neutro';
       };
     return (
