@@ -156,7 +156,8 @@ export default function CrearPedido() {
             precio: precio,
             codeAli: codeAli,
             codeMail: codeMail,
-            codeRastreo: codeRastreo
+            codeRastreo: codeRastreo,
+            estado: "En camino"
         }
         setCostoT(Number(costoT) + Number(costo))
         setTotal(Number(total) + Number(precio))
@@ -392,7 +393,7 @@ export default function CrearPedido() {
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}>Estado</div>
-                                <Dropdown options={["Pedido", "Recibido", "Enviado", "Entregado"]} onSelect={setEstado}></Dropdown>
+                                <Dropdown options={["En camino", "Por llegar", "Atrasado"]} onSelect={setEstado}></Dropdown>
                             </div>
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Anticipo</div></div>

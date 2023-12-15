@@ -60,6 +60,11 @@ export default function TablaProductos({ data, setData }) {
                                 </TableCell>
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
+                                        Estado
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
                                         Codigo Aliexpress
                                     </div>
                                 </TableCell>
@@ -100,6 +105,11 @@ export default function TablaProductos({ data, setData }) {
                                             handleInputChange(e, rowIndex, 'precio')
                                         }}>
                                         </textarea>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <textarea value={row.estado} className={styles.celdaRow} onChange={(e) => {
+                                            handleInputChange(e, rowIndex, 'estado')
+                                        }}></textarea>
                                     </TableCell>
                                     <TableCell align="right">
                                         <textarea value={row.codeAli} className={styles.celdaRow} onChange={(e) => {
