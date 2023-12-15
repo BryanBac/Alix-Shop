@@ -20,6 +20,7 @@ export default function Bar({ isDarkMode, setIsDarkMode }) {
     useEffect(()=>{
         if(permisos.length>0){
             let list = []
+            list.push("Inicio")
             if(permisos.includes("Ver Clientes")){
                 list.push("Clientes")
             }
