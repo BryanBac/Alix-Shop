@@ -88,10 +88,10 @@
         display: block;
     }
     .inputC{
-        grid-template-columns: 40% 60%;
+        grid-template-columns: 45% 55%;
     }
     .square1{
-        font-size: large;
+        font-size: medium;
     }
     .button{
         width: 100%;

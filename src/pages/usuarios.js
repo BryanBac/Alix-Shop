@@ -137,7 +137,7 @@ export default function Configuracion() {
           {permisos.includes("Cambiar Numero de Pedidos") &&
             <div>
               <div className={styles.inputC}>
-                <div className={styles.square1}><div>Numero de Pedido</div></div>
+                <div className={styles.square1}><div>No. Pedido</div></div>
                 <div className={styles.square2}>
                   <textarea type="text" className={styles.inp} onChange={(e) => setContador(e.target.value)} value={contador}>
                   </textarea>

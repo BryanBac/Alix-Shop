@@ -208,4 +208,11 @@
     .button{
         margin-top: 20px;
     }
+    .selectorContainer{
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+    .button5{
+        width: 120px;
+    }
   }

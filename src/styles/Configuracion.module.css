@@ -106,6 +106,9 @@
     .permisosContainer{
         grid-template-columns: 50% 50%
     }
+    .permisosContainer label{
+        font-size: 14px;
+    }
     .button{
         width: 140px
     }

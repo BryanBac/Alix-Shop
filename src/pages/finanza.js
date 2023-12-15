@@ -342,7 +342,7 @@ export default function VerClientes() {
       <div className={styles.superContainer}>
         <div className={styles.container}>
           <DateCalendarValue setValue={setFecha} name="Mes y Año"></DateCalendarValue>
-          <TablaFinanza data={pedidosMes}></TablaFinanza>
+          <div className={styles.grafica}><TablaFinanza data={pedidosMes}></TablaFinanza></div>
           <div>
             <BarChart
               valores={valores}

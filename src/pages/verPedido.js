@@ -558,7 +558,7 @@ export default function VerPedido() {
                                 }}>Ver Pedidos Realizados</button>
                             </div>
                             {permisos.includes("Agregar Guia") &&
-                                <>
+                                <div className={styles.buttonC}>
                                     <label htmlFor="fileInput" className={styles.button5}>
                                         Agregar Guía
                                     </label>
@@ -569,7 +569,7 @@ export default function VerPedido() {
                                         onChange={handleChange}
                                         style={{ display: 'none' }} // Oculta el input real
                                     />
-                                </>
+                                </div>
                             }
 
                         </div>

@@ -1,20 +1,23 @@
-.superContainer{
+.superContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin-top: 20px;
 }
-.container{
+
+.container {
     display: block;
     width: 50%;
     margin-top: 10px;
 }
-.buttonC{
+
+.buttonC {
     font-size: x-large;
     display: flex;
     align-items: flex-end;
 }
+
 .button {
     background-color: rgb(194, 156, 200);
     padding: 0;
@@ -23,10 +26,12 @@
     width: 200px;
     height: 40px;
 }
-.barraClientes{
+
+.barraClientes {
     display: flex;
     justify-content: space-evenly;
 }
+
 .inputC {
     display: grid;
     width: 100%;
@@ -67,18 +72,27 @@
     cursor: pointer;
     text-decoration: none;
 }
-.grid3{
+
+.grid3 {
     display: grid;
     grid-template-columns: 50% 50%;
     column-gap: 10px;
     margin-top: 20px;
 }
-.valores{
+
+.valores {
     margin-top: 20px;
     font-size: x-large;
 }
+
+.grafica {}
+
 @media screen and (max-width: 480px) {
-    .container{
+    .container {
         width: 80%;
+    }
+
+    .grafica {
+        width: 100%;
     }
 }

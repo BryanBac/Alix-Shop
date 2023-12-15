@@ -40,8 +40,8 @@
     .left{
         font-size: large;
     }
-    .hijo1{
-        font-size: large;
+    .hijo1, .hijo2, .hijo3{
+        font-size: medium;
     }
     .container{
         height: 80px;
