@@ -65,6 +65,17 @@ export default function VerPedidos() {
       pedido.clienteNombre.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
   };
+  const filtrarPedidos2 = (valorBusqueda) => {
+    console.log("vB", valorBusqueda)
+    return buscar.filter(pedido =>{
+      console.log(pedido.productos)
+      for (let i= 0; i<pedido.productos.length; i++){
+        if(pedido.productos[i].codeMail.toLowerCase().includes(valorBusqueda.toLowerCase())){
+            return pedido.productos[i].codeMail.toLowerCase().includes(valorBusqueda.toLowerCase());
+        }
+      }
+    });
+  };
 
   const fetchAliexpress = async () => {
     try {
@@ -98,6 +109,52 @@ export default function VerPedidos() {
     const valor = e.target.value;
     if (valor != "") {
       setBuscar(filtrarPedidos(valor));
+    } else {
+      const a = [...aliexpress, ...shein, ...stock]
+      const ar = a.sort((a, b) => b.contador - a.contador);
+      setAllData(ar)
+      if (selectedSources.length == 3) {
+        const combinedArray = [...aliexpress, ...shein, ...stock]
+        const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+        setBuscar(reordenArray)
+      }
+      else if (selectedSources.length == 2) {
+        if ((selectedSources[0] == "Shein" && selectedSources[1] == "AliExpress") || (selectedSources[0] == "AliExpress" && selectedSources[1] == "Shein")) {
+          const combinedArray = [...aliexpress, ...shein]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else if ((selectedSources[0] == "Shein" && selectedSources[1] == "Stock") || (selectedSources[0] == "Stock" && selectedSources[1] == "Shein")) {
+          const combinedArray = [...stock, ...shein]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else {
+          const combinedArray = [...stock, ...aliexpress]
+          const reordenArray = combinedArray.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        }
+      } else if (selectedSources.length == 1) {
+        if (selectedSources[0] == "AliExpress") {
+          const reordenArray = aliexpress.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else if (selectedSources[0] == "Shein") {
+          const reordenArray = shein.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else if (selectedSources[0] == "Stock") {
+          const reordenArray = stock.sort((a, b) => b.contador - a.contador);
+          setBuscar(reordenArray)
+        } else {
+          setBuscar([])
+        }
+      } else {
+        setBuscar([])
+      }
+    }
+  }
+
+  const Busqueda2 = (e) => {
+    const valor = e.target.value;
+    if (valor != "") {
+      setBuscar(filtrarPedidos2(valor));
     } else {
       const a = [...aliexpress, ...shein, ...stock]
       const ar = a.sort((a, b) => b.contador - a.contador);
@@ -249,6 +306,12 @@ export default function VerPedidos() {
                 <button className={styles.button} onClick={(e) => router.push("crearPedido")}>Agregar Pedido</button>
               </div>
             }
+          </div>
+          <div className={styles.barraClientes}>
+            <div className={styles.inputC}>
+              <div className={styles.square1}>Buscar Codigo</div>
+              <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => Busqueda2(e)}></textarea></div>
+            </div>
           </div>
           <div className={styles.checkboxContainer}>
             <label>
