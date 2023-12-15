@@ -67,3 +67,28 @@
     cursor: pointer;
     text-decoration: none;
 }
+@media screen and (max-width: 480px) {
+    .barraClientes{
+        display: block;
+        width: 100%;
+    }
+    .inputC{
+        grid-template-columns: 40% 60%;
+    }
+    .square1{
+        font-size: large;
+        column-gap: 5px;
+    }
+    .button{
+        width: 100%;
+    }
+    .buttonC{
+        margin-top: 20px;
+    }
+    .superContainer{
+        height: 480px;
+    }
+    .container{
+        width: 80%;
+    }
+}

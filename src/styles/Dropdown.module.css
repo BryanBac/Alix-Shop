@@ -61,3 +61,8 @@
   cursor: pointer;
   text-decoration: none;
 }
+@media screen and (max-width: 480px) {
+  .dropdownBtn{
+    font-size: medium;
+  }
+}

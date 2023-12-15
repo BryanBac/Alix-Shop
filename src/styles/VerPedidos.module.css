@@ -80,3 +80,21 @@
     column-gap: 20px;
     margin-top: 20px;
 }
+@media screen and (max-width: 480px) {
+    .container{
+        width: 80%;
+    }
+    .barraClientes{
+        display: block;
+    }
+    .inputC{
+        grid-template-columns: 40% 60%;
+    }
+    .square1{
+        font-size: large;
+    }
+    .button{
+        width: 100%;
+        margin-top: 20px;
+    }
+}

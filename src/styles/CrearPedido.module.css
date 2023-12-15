@@ -180,3 +180,32 @@
   .estado{
     background-color: var(--estado);
   }
+  @media screen and (max-width: 480px) {
+    .gridConBotones{
+        display: block;
+    }
+    .gridContainer{
+        display: block;
+    }
+    .barraProducto{
+        display: block;
+    }
+    .square1{
+        font-size: medium;
+        display: flex;
+        justify-content: center;
+    }
+    .inputC2{
+        grid-template-columns: 65% 38%;
+        column-gap: 2px;
+    }
+    .square2{
+        font-size: medium;
+    }
+    .square3{
+        font-size: large;
+    }
+    .button{
+        margin-top: 20px;
+    }
+  }

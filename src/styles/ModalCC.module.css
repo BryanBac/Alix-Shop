@@ -83,3 +83,9 @@
     color: red;
     font-style: italic;
 }
+@media screen and (max-width: 480px) {
+    .input{
+        font-size: large;
+        margin-left: 0;
+    }
+}

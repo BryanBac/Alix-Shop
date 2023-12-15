@@ -47,7 +47,7 @@ export default function Inicio() {
         <div className={styles.imagenC}>
           <img className={styles.imagen} src="Logo.png"></img>
         </div>
-        <div className={styles.imagenC}>
+        <div className={styles.imagenC2}>
           <div className={styles.mensaje}>Bienvenida a AlixShop!!!</div>
         </div>
       </div>

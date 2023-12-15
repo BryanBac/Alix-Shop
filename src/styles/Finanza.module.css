@@ -77,3 +77,8 @@
     margin-top: 20px;
     font-size: x-large;
 }
+@media screen and (max-width: 480px) {
+    .container{
+        width: 80%;
+    }
+}

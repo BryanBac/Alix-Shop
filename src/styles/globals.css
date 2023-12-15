@@ -30,3 +30,8 @@ body {
   border-radius: 20px;
   background-color: #f4eeee;
 }
+@media screen and (max-width: 480px) {
+  .scroller{
+    margin-top: 20px;
+  }
+}

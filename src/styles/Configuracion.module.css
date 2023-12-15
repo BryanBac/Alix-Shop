@@ -89,3 +89,24 @@
     grid-template-columns: 25% 25% 25% 25%;
     column-gap: 3%;
 }
+@media screen and (max-width: 480px) {
+    .container{
+        width: 80%;
+    }
+    .inputC{
+        grid-template-columns:35% 15% 50%;
+        column-gap: 5px;
+    }
+    .square1{
+        font-size: small;
+    }
+    .gridUser{
+        display: block;
+    }
+    .permisosContainer{
+        grid-template-columns: 50% 50%
+    }
+    .button{
+        width: 140px
+    }
+}

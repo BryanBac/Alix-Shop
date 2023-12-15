@@ -36,3 +36,14 @@
     font-size: medium;
     font-style: italic;
 }
+@media screen and (max-width: 480px) {
+    .left{
+        font-size: large;
+    }
+    .hijo1{
+        font-size: large;
+    }
+    .container{
+        height: 80px;
+    }
+}

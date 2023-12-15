@@ -399,7 +399,7 @@ export default function CrearPedido() {
                                 <div className={styles.square2}><input type="text" className={styles.inp} onChange={(e) => setAnticipo(e.target.value)} value={anticipo}></input></div>
                             </div>
                             <div className={styles.inputC}>
-                                <div className={styles.square1}><div>¿Quien Recibe?</div></div>
+                                <div className={styles.square1}>¿Quien Recibe?</div>
                                 <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setRecibe(e.target.value)} value={recibe}></textarea></div>
                             </div>
                             <div className={styles.inputC}>
