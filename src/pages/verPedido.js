@@ -64,22 +64,22 @@ const convertirStringANumero = (numerosString) => {
 function agregarSiNoExiste(primerString, segundoString) {
     // Convierte el primer string en un array utilizando la coma como delimitador
     const elementos = primerString.split(',');
-  
+
     // Verifica si el segundo string ya está en el array
     if (!elementos.includes(segundoString)) {
-      // Si no está, agrégalo al final del array
-      elementos.push(segundoString);
-  
-      // Convierte el array de nuevo a un string con las comas como separadores
-      const nuevoString = elementos.join(',');
-  
-      // Devuelve el nuevo string
-      return nuevoString;
+        // Si no está, agrégalo al final del array
+        elementos.push(segundoString);
+
+        // Convierte el array de nuevo a un string con las comas como separadores
+        const nuevoString = elementos.join(',');
+
+        // Devuelve el nuevo string
+        return nuevoString;
     }
-  
+
     // Si el segundo string ya está en el array, devuelve el string original sin cambios
     return primerString;
-  }
+}
 
 export default function VerPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -246,12 +246,12 @@ export default function VerPedido() {
             }
             modificarDocumento(clienteDrop, "clientes", c)
             if (file != null) {
-                let r = agregarSiNoExiste(relacionados,contador.toString());
+                let r = agregarSiNoExiste(relacionados, contador.toString());
                 const refImagen = ref(storage, `/${file.name + v4()}`);
                 uploadBytes(refImagen, file).then((snapshot) => {
                     getDownloadURL(snapshot.ref).then((url) => {
                         setImURL(url)
-                        setPedidosR(convertirStringANumero(relacionados))
+                        let pR = convertirStringANumero(relacionados)
                         let pedido = {
                             origen: aliShein,
                             clienteId: clienteDrop,
@@ -277,7 +277,43 @@ export default function VerPedido() {
                             relacionados: r
                         }
                         modificarDocumento(idPedido, aliShein, pedido)
+                        let pedidosAMandar = []
+                        for (let i = 0; i < pR.length; i++) {
+                            if (allData.find(objeto => objeto.contador === pR[i])) {
+                                let x = allData.find(objeto => objeto.contador === pR[i]);
+                                let pedido = {
+                                    id: x.id,
+                                    origen: x.origen,
+                                    clienteId: x.clienteId,
+                                    clienteNombre: x.clienteNombre,
+                                    fechaPedido: x.fechaPedido,
+                                    fechaAprox: x.fechaAprox,
+                                    codeAli: x.codeAli,
+                                    codeMail: x.codeMail,
+                                    codeRastreo: x.codeRastreo,
+                                    anticipo: x.anticipo,
+                                    estado: x.estado,
+                                    fechaFinal: x.fechaFinal,
+                                    costoTotal: x.costoTotal,
+                                    precioTotal: x.precioTotal,
+                                    productos: x.productos,
+                                    recibe: x.recibe,
+                                    envio: x.envio,
+                                    imagen: url,
+                                    telefono: x.telefono,
+                                    direccion: x.direccion,
+                                    contador: x.contador,
+                                    username: x.username,
+                                    relacionados: r
+                                }
+                                pedidosAMandar.push(pedido)
+                            }
+                        }
+                        sessionStorage.setItem("imURL", url)
+                        console.log("Pedido a Mandar", pedidosAMandar)
+                        sessionStorage.setItem("dataMod", JSON.stringify(pedidosAMandar))
                         vaciar()
+                        setOpenPopUp(true)
                     });
                 });
             } else {
@@ -419,47 +455,6 @@ export default function VerPedido() {
         }
     }, [productos])
 
-    useEffect(() => {
-        if (imURl != "" && pedidosR.length > 0) {
-            let pedidosAMandar = []
-            let r = agregarSiNoExiste(relacionados,contador.toString());
-            for (let i = 0; i < pedidosR.length; i++) {
-                if (allData.find(objeto => objeto.contador === pedidosR[i])) {
-                    let x = allData.find(objeto => objeto.contador === pedidosR[i]);
-                    let pedido = {
-                        id: x.id,
-                        origen: x.origen,
-                        clienteId: x.clienteId,
-                        clienteNombre: x.clienteNombre,
-                        fechaPedido: x.fechaPedido,
-                        fechaAprox: x.fechaAprox,
-                        codeAli: x.codeAli,
-                        codeMail: x.codeMail,
-                        codeRastreo: x.codeRastreo,
-                        anticipo: x.anticipo,
-                        estado: x.estado,
-                        fechaFinal: x.fechaFinal,
-                        costoTotal: x.costoTotal,
-                        precioTotal: x.precioTotal,
-                        productos: x.productos,
-                        recibe: x.recibe,
-                        envio: x.envio,
-                        imagen: imURl,
-                        telefono: x.telefono,
-                        direccion: x.direccion,
-                        contador: x.contador,
-                        username: x.username,
-                        relacionados: r
-                    }
-                    pedidosAMandar.push(pedido)
-                }
-            }
-            sessionStorage.setItem("imURL", imURl)
-            console.log("Pedido a Mandar", pedidosAMandar)
-            sessionStorage.setItem("dataMod", JSON.stringify(pedidosAMandar))
-            setOpenPopUp(true)
-        }
-    }, [imURl, pedidosR])
     return (
         <>
             <Head>
