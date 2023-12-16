@@ -218,7 +218,8 @@ export default function CrearPedido() {
                 telefono: clienteTelefono,
                 direccion: clienteDirección,
                 imagen: "",
-                username: clienteUsername
+                username: clienteUsername,
+                relacionados: ""
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])
@@ -259,7 +260,8 @@ export default function CrearPedido() {
                 telefono: clienteTelefono,
                 direccion: clienteDirección,
                 imagen: "",
-                username: clienteUsername
+                username: clienteUsername,
+                relacionados: ""
             }
             contador[0].contador = contador[0].contador + 1;
             modificarDocumento(contador[0].id, "contadorPedido", contador[0])

@@ -56,6 +56,30 @@ export const calcularDiferenciaEntreFechas = (fecha1, fecha2) => {
     return diasDiferencia;
 };
 
+const convertirStringANumero = (numerosString) => {
+    const numerosArray = numerosString.split(',').map(numero => Number(numero.trim()));
+    return numerosArray;
+};
+
+function agregarSiNoExiste(primerString, segundoString) {
+    // Convierte el primer string en un array utilizando la coma como delimitador
+    const elementos = primerString.split(',');
+  
+    // Verifica si el segundo string ya está en el array
+    if (!elementos.includes(segundoString)) {
+      // Si no está, agrégalo al final del array
+      elementos.push(segundoString);
+  
+      // Convierte el array de nuevo a un string con las comas como separadores
+      const nuevoString = elementos.join(',');
+  
+      // Devuelve el nuevo string
+      return nuevoString;
+    }
+  
+    // Si el segundo string ya está en el array, devuelve el string original sin cambios
+    return primerString;
+  }
 
 export default function VerPedido() {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -65,7 +89,10 @@ export default function VerPedido() {
     const [openPopUp4, setOpenPopUp4] = useState(false)
     const [openPopUp5, setOpenPopUp5] = useState(false)
     const [agregarCliente, setAgregarCliente] = useState(false)
+    const [contadorModificar, setContadorModificar] = useState(0) // este es para modificar lo de la guía en otros pedidos
     const [contador, setContador] = useState(0)
+    const [relacionados, setRelacionados] = useState("")
+    const [pedidosR, setPedidosR] = useState([])
     const router = useRouter();
     useEffect(() => {
         const unsubscribe = checkAuth((user) => {
@@ -123,9 +150,17 @@ export default function VerPedido() {
     const [prompt, setPrompt] = useState("Añadir Imagen");
     const [file, setFile] = useState(null);
     const [tamañoImagen, setTamañoImagen] = useState(250)
+    const [imURl, setImURL] = useState("")
     const [abrirImagen, setAbrirImagen] = useState(false)
     //
-    const [allData, setAllData] = useState([]);
+    const [allData, setAllData] = useState(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            const all = sessionStorage.getItem('allData');
+            return JSON.parse(all)
+        } else {
+            return []
+        }
+    })
     const [dataFiltrada, setDataFiltrada] = useState(() => {
         if (typeof window !== 'undefined' && window.sessionStorage) {
             const all = sessionStorage.getItem('allData');
@@ -211,9 +246,12 @@ export default function VerPedido() {
             }
             modificarDocumento(clienteDrop, "clientes", c)
             if (file != null) {
+                let r = agregarSiNoExiste(relacionados,contador.toString());
                 const refImagen = ref(storage, `/${file.name + v4()}`);
                 uploadBytes(refImagen, file).then((snapshot) => {
                     getDownloadURL(snapshot.ref).then((url) => {
+                        setImURL(url)
+                        setPedidosR(convertirStringANumero(relacionados))
                         let pedido = {
                             origen: aliShein,
                             clienteId: clienteDrop,
@@ -235,11 +273,11 @@ export default function VerPedido() {
                             telefono: clienteTelefono,
                             direccion: clienteDirección,
                             contador: contador,
-                            username: clienteUsername
+                            username: clienteUsername,
+                            relacionados: r
                         }
                         modificarDocumento(idPedido, aliShein, pedido)
                         vaciar()
-                        setOpenPopUp(true)
                     });
                 });
             } else {
@@ -264,90 +302,15 @@ export default function VerPedido() {
                     telefono: clienteTelefono,
                     direccion: clienteDirección,
                     contador: contador,
-                    username: clienteUsername
+                    username: clienteUsername,
+                    relacionados: r
                 }
                 modificarDocumento(idPedido, aliShein, pedido)
                 vaciar()
-                setOpenPopUp(true)
             }
 
         }
 
-    }
-    const modificarPedido2 = () => {
-        if (aliShein != "Aliexpress" && aliShein != "Shein" && aliShein != "Stock") {
-            setOpenPopUp3(true)
-        } else {
-            let c = {
-                nombre: clienteObt.nombre,
-                username: clienteObt.username,
-                direccion: clienteDirección,
-                cant_pedidos: clienteObt.cant_pedidos,
-                telefono: clienteTelefono
-            }
-            modificarDocumento(clienteDrop, "clientes", c)
-            if (file != null) {
-                const refImagen = ref(storage, `/${file.name + v4()}`);
-                uploadBytes(refImagen, file).then((snapshot) => {
-                    getDownloadURL(snapshot.ref).then((url) => {
-                        let pedido = {
-                            origen: aliShein,
-                            clienteId: clienteDrop,
-                            clienteNombre: clienteNombre,
-                            fechaPedido: fechaHoy,
-                            fechaAprox: fechaAprox,
-                            codeAli: codeAli,
-                            codeMail: codeMail,
-                            codeRastreo: codeRastreo,
-                            anticipo: Number(anticipo),
-                            estado: estado,
-                            fechaFinal: fechaFinal,
-                            costoTotal: costoT,
-                            precioTotal: total,
-                            productos: productos,
-                            recibe: recibe,
-                            envio: envio,
-                            imagen: url,
-                            telefono: clienteTelefono,
-                            direccion: clienteDirección,
-                            contador: contador,
-                            username: clienteUsername
-                        }
-                        modificarDocumento(idPedido, aliShein, pedido)
-                        vaciar()
-                        setOpenPopUp2(true)
-                    });
-                });
-            } else {
-                let pedido = {
-                    origen: aliShein,
-                    clienteId: clienteDrop,
-                    clienteNombre: clienteNombre,
-                    fechaPedido: fechaHoy,
-                    fechaAprox: fechaAprox,
-                    codeAli: codeAli,
-                    codeMail: codeMail,
-                    codeRastreo: codeRastreo,
-                    anticipo: Number(anticipo),
-                    estado: estado,
-                    fechaFinal: fechaFinal,
-                    costoTotal: costoT,
-                    precioTotal: total,
-                    productos: productos,
-                    recibe: recibe,
-                    envio: envio,
-                    imagen: "",
-                    telefono: clienteTelefono,
-                    direccion: clienteDirección,
-                    contador: contador,
-                    username: clienteUsername
-                }
-                modificarDocumento(idPedido, aliShein, pedido)
-                vaciar()
-                setOpenPopUp2(true)
-            }
-
-        }
     }
 
     useEffect(() => {
@@ -369,6 +332,7 @@ export default function VerPedido() {
     }, [fechaHoy])
 
     useEffect(() => {
+        console.log(allData)
         if (allData.length > 0 && clienteNombre != "") {
             const documentosFiltrados = allData.filter(documento =>
                 documento.clienteNombre === clienteNombre
@@ -429,6 +393,7 @@ export default function VerPedido() {
             setContador(pedidoObtenido.contador)
             setClienteTelefono(pedidoObtenido.telefono)
             setClienteDirección(pedidoObtenido.direccion)
+            setRelacionados(pedidoObtenido.relacionados)
 
         } else {
         }
@@ -453,6 +418,48 @@ export default function VerPedido() {
             setCostoT(costT)
         }
     }, [productos])
+
+    useEffect(() => {
+        if (imURl != "" && pedidosR.length > 0) {
+            let pedidosAMandar = []
+            let r = agregarSiNoExiste(relacionados,contador.toString());
+            for (let i = 0; i < pedidosR.length; i++) {
+                if (allData.find(objeto => objeto.contador === pedidosR[i])) {
+                    let x = allData.find(objeto => objeto.contador === pedidosR[i]);
+                    let pedido = {
+                        id: x.id,
+                        origen: x.origen,
+                        clienteId: x.clienteId,
+                        clienteNombre: x.clienteNombre,
+                        fechaPedido: x.fechaPedido,
+                        fechaAprox: x.fechaAprox,
+                        codeAli: x.codeAli,
+                        codeMail: x.codeMail,
+                        codeRastreo: x.codeRastreo,
+                        anticipo: x.anticipo,
+                        estado: x.estado,
+                        fechaFinal: x.fechaFinal,
+                        costoTotal: x.costoTotal,
+                        precioTotal: x.precioTotal,
+                        productos: x.productos,
+                        recibe: x.recibe,
+                        envio: x.envio,
+                        imagen: imURl,
+                        telefono: x.telefono,
+                        direccion: x.direccion,
+                        contador: x.contador,
+                        username: x.username,
+                        relacionados: r
+                    }
+                    pedidosAMandar.push(pedido)
+                }
+            }
+            sessionStorage.setItem("imURL", imURl)
+            console.log("Pedido a Mandar", pedidosAMandar)
+            sessionStorage.setItem("dataMod", JSON.stringify(pedidosAMandar))
+            setOpenPopUp(true)
+        }
+    }, [imURl, pedidosR])
     return (
         <>
             <Head>
@@ -549,6 +556,10 @@ export default function VerPedido() {
                             <div className={styles.inputC}>
                                 <div className={styles.square1}><div>Envio</div></div>
                                 <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setEnvio(e.target.value)} value={envio}></textarea></div>
+                            </div>
+                            <div className={styles.inputC}>
+                                <div className={styles.square1}><div>Pedidos en Guía</div></div>
+                                <div className={styles.square2}><textarea type="text" className={styles.inp} onChange={(e) => setRelacionados(e.target.value)} value={relacionados}></textarea></div>
                             </div>
                         </div>
                         <div className={styles.selectorContainer}>

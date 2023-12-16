@@ -4,6 +4,7 @@ import Head from 'next/head'
 import styles from '@/styles/Inicio.module.css'
 import { onAuthStateChanged } from 'firebase/auth';
 import { authG } from "../../firebase";
+import modificarDocumento from "./api/firebase/update-data";
 import { useRouter } from "next/router";
 
 const checkAuth = (callback) => {
@@ -14,6 +15,7 @@ const checkAuth = (callback) => {
 
 export default function Inicio() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [paso, setPaso] = useState(false)
   // para los permisos
   const [permisos, setPermisos] = useState(() => {
     if (typeof window !== 'undefined' && window.sessionStorage) {
@@ -21,6 +23,22 @@ export default function Inicio() {
       return JSON.parse(all)
     } else {
       return []
+    }
+  })
+  const [dataMod, setDataMod] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const all = sessionStorage.getItem('dataMod');
+      return JSON.parse(all)
+    } else {
+      return []
+    }
+  })
+  const [imURL, setImURL] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      setPaso(true)
+      return sessionStorage.getItem('imURL');
+    } else {
+      return ""
     }
   })
   const router = useRouter();
@@ -34,6 +52,21 @@ export default function Inicio() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(()=>{
+    if(imURL!=""&&paso==true){ // esto es que si hay que modificar y que si pasó
+      if(dataMod.length>0){
+        console.log("DataMod", dataMod)
+        for(let i=0; i<dataMod.length; i++){
+          modificarDocumento(dataMod[i].id, dataMod[i].origen, dataMod[i])
+        }
+        sessionStorage.setItem("dataMod", JSON.stringify([]))
+        sessionStorage.setItem("imURL", "")
+      }
+    }else if (imURL==""&&paso==true){ // esto es que no hay nada que actualizar pero si se revisó
+      console.log("No hay nada que actualizar")
+    }
+  },[imURL, paso, dataMod])
   return (
     <>
       <Head>

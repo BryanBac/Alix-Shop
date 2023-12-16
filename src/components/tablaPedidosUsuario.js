@@ -22,6 +22,11 @@ export default function TablaUsuario({ data }) {
                                 </TableCell>
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
+                                        No Pedido
+                                    </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
                                         Total
                                     </div>
                                 </TableCell>
@@ -43,6 +48,11 @@ export default function TablaUsuario({ data }) {
                                     <TableCell align="right">
                                         <div className={styles.celdaRow}>
                                             {row.fechaPedido}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <div className={styles.celdaRow}>
+                                            {row.contador}
                                         </div>
                                     </TableCell>
                                     <TableCell align="right">

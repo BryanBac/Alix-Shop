@@ -29,6 +29,8 @@ export default function Home() {
           sessionStorage.setItem("usuario", usuario);
           sessionStorage.setItem("pagina", "noLogin")
           sessionStorage.setItem("modo", "false");
+          sessionStorage.setItem("imURL", "")
+          sessionStorage.setItem("dataMod", JSON.stringify([]))
           router.push("inicio")
         } else {
           setParaVer("3")

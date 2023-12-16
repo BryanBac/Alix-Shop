@@ -16,7 +16,7 @@ export default function CreatePedidoModal(props) {
                 type=""
                 onClick={() => {
                     setOpenPopUp(false);
-                    router.push("verPedidos")
+                    router.push("inicio")
                 }}
             >
                 Aceptar
