@@ -521,10 +521,13 @@ export default function CrearPedido() {
                                                 cant_pedidos: 0,
                                                 telefono: agregarContacto
                                             }).then(data => {
+                                                console.log("Data s", data)
                                                 setClienteDrop(data);
                                             })
-                                            let x = agregarNombre + "---" + agregarUsername
-                                            setClienteNombre(x)
+                                            setClienteNombre(agregarNombre)
+                                            setClienteUsername(agregarUsername)
+                                            setClienteDirección(agregarCodigoId)
+                                            setClienteTelefono(agregarContacto)
                                             setAgregarCliente("")
                                             setAgregarCodigoId("")
                                             setAgregarContacto("")
