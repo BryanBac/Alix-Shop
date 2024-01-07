@@ -317,6 +317,8 @@ export default function VerPedido() {
                     });
                 });
             } else {
+                let r = agregarSiNoExiste(relacionados, contador.toString());
+                let pR = convertirStringANumero(relacionados)
                 let pedido = {
                     origen: aliShein,
                     clienteId: clienteDrop,
@@ -342,7 +344,42 @@ export default function VerPedido() {
                     relacionados: r
                 }
                 modificarDocumento(idPedido, aliShein, pedido)
+                let pedidosAMandar = []
+                for (let i = 0; i < pR.length; i++) {
+                    if (allData.find(objeto => objeto.contador === pR[i])) {
+                        let x = allData.find(objeto => objeto.contador === pR[i]);
+                        let pedido = {
+                            id: x.id,
+                            origen: x.origen,
+                            clienteId: x.clienteId,
+                            clienteNombre: x.clienteNombre,
+                            fechaPedido: x.fechaPedido,
+                            fechaAprox: x.fechaAprox,
+                            codeAli: x.codeAli,
+                            codeMail: x.codeMail,
+                            codeRastreo: x.codeRastreo,
+                            anticipo: x.anticipo,
+                            estado: x.estado,
+                            fechaFinal: x.fechaFinal,
+                            costoTotal: x.costoTotal,
+                            precioTotal: x.precioTotal,
+                            productos: x.productos,
+                            recibe: x.recibe,
+                            envio: x.envio,
+                            imagen: x.url,
+                            telefono: x.telefono,
+                            direccion: x.direccion,
+                            contador: x.contador,
+                            username: x.username,
+                            relacionados: r
+                        }
+                        pedidosAMandar.push(pedido)
+                    }
+                }
+                console.log("Pedido a Mandar", pedidosAMandar)
+                sessionStorage.setItem("dataMod", JSON.stringify(pedidosAMandar))
                 vaciar()
+                setOpenPopUp(true)
             }
 
         }

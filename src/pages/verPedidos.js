@@ -68,7 +68,7 @@ export default function VerPedidos() {
   const filtrarPedidos2 = (valorBusqueda) => {
     console.log("vB", valorBusqueda)
     return buscar.filter(pedido =>{
-      console.log(pedido.productos)
+      console.log("Productos: ", pedido.productos)
       for (let i= 0; i<pedido.productos.length; i++){
         if(pedido.productos[i].codeMail.toLowerCase().includes(valorBusqueda.toLowerCase())){
             return pedido.productos[i].codeMail.toLowerCase().includes(valorBusqueda.toLowerCase());
