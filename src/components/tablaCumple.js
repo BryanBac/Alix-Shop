@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import styles from "@/styles/Tabla.module.css";
 
-export default function TablaCumple({ data, id }) {
+export default function TablaCumple({ data, id, selected }) {
   return (
     <>
       <div className="scroller">
@@ -23,9 +23,26 @@ export default function TablaCumple({ data, id }) {
             <TableBody>
               {data.map((row, index) => (
                 <TableRow key={index}>
-                  <TableCell align="right">
-                    <div className={index===id?styles.celdaRowCumple: styles.celdaRow}>{row}</div>
-                  </TableCell>
+                  {selected === false && (
+                    <TableCell align="right">
+                      <div
+                        className={
+                          index === id ? styles.celdaRowCumple : styles.celdaRow
+                        }
+                      >
+                        {row}
+                      </div>
+                    </TableCell>
+                  )}
+                  {selected && (
+                    <div
+                      className={
+                        index === id ? styles.celdaRowCumple2 : styles.celdaRow
+                      }
+                    >
+                      {row}
+                    </div>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

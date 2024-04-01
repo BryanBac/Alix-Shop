@@ -7,9 +7,18 @@ import enviar from "./api/firebase/post-data";
 import obtenerPorId from "./api/firebase/get-data-one";
 import TablaCumple from "@/components/tablaCumple";
 
+function diasHasta22DeAbril() {
+  const fechaActual = new Date();
+  const fecha22Abril = new Date(fechaActual.getFullYear(), 3, 22);
+  const diferenciaMs = fecha22Abril - fechaActual;
+  const diasFaltantes = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
+  return diasFaltantes;
+}
+
 export default function Cumpleaños() {
   const [state, setState] = useState("select");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [selected, setSelected] = useState(false)
   const [id, setId] = useState(0);
   const [seconds, setSeconds] = useState(10);
   const max = 3;
@@ -30,6 +39,7 @@ export default function Cumpleaños() {
           setId(Math.floor(Math.random() * elementosCarro.length));
         } else {
           setEnable(false);
+          setSelected(true)
         }
       }, 1000);
       return () => clearInterval(interval);
@@ -130,7 +140,7 @@ export default function Cumpleaños() {
                   ></textarea>
                 </div>
               </div>
-              <TablaCumple data={elementosCarro} id={-1} />
+              <TablaCumple data={elementosCarro} id={-1} selected={false} />
               <button
                 onClick={() => {
                   enviar("listadoCumple", {
@@ -147,7 +157,7 @@ export default function Cumpleaños() {
           )}
           {state === "rulet" && existe.eleccion === "na" && (
             <div className={styles.election}>
-              <TablaCumple data={elementosCarro} id={id} />
+              <TablaCumple data={elementosCarro} id={id} selected={false}/>
               <button
                 onClick={() => {
                   console.log("lenght", elementosCarro2.length)
@@ -162,12 +172,14 @@ export default function Cumpleaños() {
                     enviar("verdaderaLista", {elementosCarro2})
                     setState("ultimo")
                   }
+                  setSelected(false)
                 }}
                 className={styles.square3}
               >
                 {elementosCarro2.length<=max? "Reiniciar": "enviar listado"}
               </button>
-              <TablaCumple data={elementosCarro2} id={-1} />
+              <div>Faltan {seconds>0? seconds: 0} segundos para que puedas reiniciarlo</div>
+              <TablaCumple data={elementosCarro2} id={-1} selected={selected} />
             </div>
           )}
           
@@ -184,7 +196,7 @@ export default function Cumpleaños() {
           {state === "enigma" && existe.eleccion === "na" && (
             <div className={styles.election}>
               <div className={styles.mensaje}>
-                Tendrás que esperar para saber que es
+                Tendrás que esperar {diasHasta22DeAbril()} días para saber que es
               </div>
               <div className={styles.imagenC}>
                 <img className={styles.imagen} src="regalo.png"></img>
@@ -194,7 +206,7 @@ export default function Cumpleaños() {
           {existe.eleccion === "enigma" && (
             <div className={styles.election}>
               <div className={styles.mensaje}>
-                Tendrás que esperar para saber que es
+                Tendrás que esperar {diasHasta22DeAbril()} días para saber que es
               </div>
               <div className={styles.imagenC}>
                 <img className={styles.imagen} src="regalo.png"></img>
