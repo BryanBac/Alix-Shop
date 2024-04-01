@@ -28,7 +28,6 @@ export default function Cumpleaños() {
         setSeconds((prevSeconds) => prevSeconds - 1);
         if (seconds >= 0) {
           setId(Math.floor(Math.random() * elementosCarro.length));
-          console.log(id, seconds);
         } else {
           setEnable(false);
         }

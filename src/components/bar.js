@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import styles from '@/styles/Bar.module.css'
-import DehazeIcon from '@mui/icons-material/Dehaze';
 import DropdownRoute from "./dropdownRoute";
 
 export default function Bar({ isDarkMode, setIsDarkMode }) {
