@@ -29,7 +29,10 @@ export default function DropdownRoute({ options, isDarkMode }) {
             router.push("finanza");
         }else if(option=="Usuarios y Permisos"){
             router.push("usuarios");
-        }else if(option=="Cerrar Sesión"){
+        }else if(option==="Cumpleaños"){
+            router.push("cumple");
+        }
+        else if(option=="Cerrar Sesión"){
             handleLogout();
         }else{
             

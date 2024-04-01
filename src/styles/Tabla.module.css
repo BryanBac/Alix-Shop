@@ -14,6 +14,15 @@
     justify-content: center;
 }
 
+.celdaRowCumple {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(194, 156, 200, 0.8);
+    color: white;
+}
+
 .celdaRow2 {
     font-weight: 600;
     display: flex;

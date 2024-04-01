@@ -36,6 +36,9 @@ export default function Bar({ isDarkMode, setIsDarkMode }) {
             if(permisos.includes("Ver Usuarios")){
                 list.push("Usuarios y Permisos")
             }
+            if(permisos.includes("Cumpleaños")){
+                list.push("Cumpleaños")
+            }
             list.push("Cerrar Sesión")
             setOpciones(list)
         }
