@@ -21,7 +21,7 @@ export default function Cumpleaños() {
   const [selected, setSelected] = useState(false)
   const [id, setId] = useState(0);
   const [seconds, setSeconds] = useState(10);
-  const max = 3;
+  const max = 2;
   const [enable, setEnable] = useState(false);
   const [elemento, setElemento] = useState("");
   const [elementosCarro, setElementosCarro] = useState([]);
@@ -120,6 +120,7 @@ export default function Cumpleaños() {
           )}
           {state === "filling" && existe.eleccion === "na" && (
             <div className={styles.election}>
+              <div>Puedes meter cualquier cantidad, pero solo se enviarán 3 aleatorios</div>
               <div className={styles.inputC}>
                 <button
                   onClick={() => {
