@@ -210,7 +210,9 @@ export default function Cumpleaños() {
                 Tendrás que esperar {diasHasta22DeAbril()} días para saber que es
               </div>
               <div className={styles.imagenC}>
-                <img className={styles.imagen} src="regalo.png"></img>
+                {diasHasta22DeAbril()===0&&<img className={styles.imagen} src="botas.png"></img>}
+                {diasHasta22DeAbril()!==0&&<img className={styles.imagen} src="regalo.png"></img>}
+                
               </div>
             </div>
           )}
