@@ -80,8 +80,14 @@ export default function TablaProductos({ data, setData }) {
                                 </TableCell>
                                 <TableCell align="right">
                                     <div className={styles.celdaRow}>
+                                        Producto
                                     </div>
                                 </TableCell>
+                                <TableCell align="right">
+                                    <div className={styles.celdaRow}>
+                                    </div>
+                                </TableCell>
+                                
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -128,6 +134,9 @@ export default function TablaProductos({ data, setData }) {
                                             handleInputChange(e, rowIndex, 'codeRastreo')
                                         }}>
                                         </textarea>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <textarea disabled value={row.producto} className={styles.celdaRow}/>
                                     </TableCell>
                                     <TableCell align="right">
                                         <button onClick={() => eliminarFila(rowIndex)} className="boton-sin"><DeleteIcon></DeleteIcon></button>
