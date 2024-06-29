@@ -5,7 +5,7 @@ import styles from '@/styles/CrearPedido.module.css'
 import obtenerPorId from "./api/firebase/get-data-one";
 import DateCalendarValue from "@/components/datePicker";
 import TablaProductos from "@/components/tablaProducto";
-import CreatePedidoModal from "@/components/popup/modalCreatePedido";
+import UpdatePedidoModal from "@/components/popup/modalUpdatePedido";
 import CreatePedidoModal2 from "@/components/popup/modalCreatePedido2";
 import enviarId from "./api/firebase/post-data-id";
 import ModalPopUp from "@/components/popup/popup";
@@ -310,7 +310,6 @@ export default function VerPedido() {
                             }
                         }
                         sessionStorage.setItem("imURL", url)
-                        console.log("Pedido a Mandar", pedidosAMandar)
                         sessionStorage.setItem("dataMod", JSON.stringify(pedidosAMandar))
                         vaciar()
                         setOpenPopUp(true)
@@ -505,7 +504,7 @@ export default function VerPedido() {
                 openPopUp={openPopUp}
                 setOpenPopUp={setOpenPopUp}
             >
-                <CreatePedidoModal mensaje="Actualizado Exitosamente" numeroPedido={contador}></CreatePedidoModal>
+                <UpdatePedidoModal mensaje="Actualizado Exitosamente" numeroPedido={contador}></UpdatePedidoModal>
             </ModalPopUp>
             <ModalPopUp
                 openPopUp={openPopUp2}
